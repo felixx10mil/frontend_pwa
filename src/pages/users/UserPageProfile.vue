@@ -2,16 +2,19 @@
 import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/auth-storage'
 import { useFetchUser } from 'src/composables/fetch.js'
+import useAuth from 'src/composables/UseAuth'
 import DialogEditPassword from 'src/components/dialogs/user/DialogEditPassword.vue'
 import DialogEditAccount from 'src/components/dialogs/user/DialogEditAccount.vue'
 import DialogEditPhoto from 'src/components/dialogs/user/DialogEditPhoto.vue'
 import DialogEditProfile from 'src/components/dialogs/user/DialogEditProfile.vue'
 import DarkMode from 'src/components/DarkMode.vue'
 import UserInfo from 'src/components/users/UserInfo.vue'
+import SettingSkeleton from 'src/components/skeletons/SettingSkeleton.vue'
 
 const $q = useQuasar()
 const store = useAuthStore()
 const { data, refresh } = useFetchUser(`users/${store.getStateId}`)
+const { logout } = useAuth()
 
 function updatePassword() {
   $q.dialog({
@@ -49,6 +52,10 @@ function updateAccount() {
   })
     .onOk(() => refresh())
     .onCancel(() => {})
+}
+
+function handleLogout() {
+  logout()
 }
 </script>
 
@@ -107,7 +114,17 @@ function updateAccount() {
           </q-item-label>
         </q-item-section>
       </q-item>
+      <q-item clickable v-ripple @click="handleLogout">
+        <q-item-section avatar top>
+          <q-avatar icon="logout" color="primary" text-color="white" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>Logout</q-item-label>
+          <q-item-label caption> Log out of the application. </q-item-label>
+        </q-item-section>
+      </q-item>
     </q-list>
+    <SettingSkeleton v-else :rows="6" />
   </q-page>
 </template>
 <style scoped></style>

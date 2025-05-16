@@ -6,6 +6,7 @@ import DialogUserDelete from 'src/components/dialogs/user/DialogUserDelete.vue'
 import DialogUserRole from 'src/components/dialogs/user/DialogUserRole.vue'
 import UserInfo from 'src/components/users/UserInfo.vue'
 import HandleStatusUser from 'src/components/HandleStatusUser.vue'
+import SettingSkeleton from 'src/components/skeletons/SettingSkeleton.vue'
 
 const props = defineProps({
   id: {
@@ -83,5 +84,6 @@ function userDelete() {
         </q-item-section>
       </q-item>
     </q-list>
+    <SettingSkeleton v-else :rows="3" />
   </q-page>
 </template>

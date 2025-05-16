@@ -1,4 +1,3 @@
-import { useQuasar } from 'quasar'
 import { api } from 'src/boot/axios'
 import { readonly, ref } from 'vue'
 
@@ -9,14 +8,9 @@ import { readonly, ref } from 'vue'
  * @returns
  */
 export function useFetchUser(url) {
-  const $q = useQuasar()
   const data = ref(null)
 
-  const loadUser = async () => {
-    $q.loading.show({
-      message: 'Loading...',
-    })
-
+  async function loadUser() {
     try {
       const response = await api.get(url)
       if (response.data.status === 'OK') {
@@ -24,8 +18,6 @@ export function useFetchUser(url) {
       }
     } catch (err) {
       if (err) console.log('Oops!')
-    } finally {
-      $q.loading.hide()
     }
   }
 
@@ -41,14 +33,9 @@ export function useFetchUser(url) {
  * @returns
  */
 export function useFetchUsers(url) {
-  const $q = useQuasar()
   const data = ref([])
 
-  const loadUsers = async () => {
-    $q.loading.show({
-      message: 'Loading...',
-    })
-
+  async function loadUsers() {
     try {
       const response = await api.get(url)
       if (response.data.status === 'OK') {
@@ -56,8 +43,6 @@ export function useFetchUsers(url) {
       }
     } catch (err) {
       if (err) console.log('Oops!')
-    } finally {
-      $q.loading.hide()
     }
   }
 

@@ -7,15 +7,7 @@ import FooterToolbar from 'src/components/footers/FooterToolbar.vue'
   <q-layout view="lHh Lpr lFf">
     <HeaderBack />
     <q-page-container>
-      <router-view v-slot="{ Component }">
-        <transition
-          appear
-          enter-active-class="animated slideInLeft"
-          leave-active-class="animated slideInRight"
-        >
-          <component :is="Component" />
-        </transition>
-      </router-view>
+      <router-view />
     </q-page-container>
     <FooterToolbar />
   </q-layout>

@@ -2,15 +2,8 @@
 import { ref } from 'vue'
 import { navs } from 'src/router/navs'
 import FooterToolbar from 'src/components/footers/FooterToolbar.vue'
-import useAuth from 'src/composables/UseAuth'
 
-const { logout } = useAuth()
 const leftDrawerOpen = ref(false)
-
-// Logout
-function handleLogout() {
-  logout()
-}
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
@@ -30,16 +23,9 @@ function toggleLeftDrawer() {
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-        <q-toolbar-title> Quasar App </q-toolbar-title>
-        <q-btn-dropdown flat icon="person">
-          <q-list>
-            <q-item clickable v-close-popup @click="handleLogout">
-              <q-item-section>
-                <q-item-label>Log out </q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
+        <q-toolbar-title class="absolute-center">
+          <strong>Dashboard</strong>
+        </q-toolbar-title>
       </q-toolbar>
     </q-header>
     <q-drawer v-if="$q.platform.is.desktop" v-model="leftDrawerOpen" show-if-above bordered>
