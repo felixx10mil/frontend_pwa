@@ -21,7 +21,7 @@ function onRejected() {
   notifyError('The selected image exceeds 300KB')
 }
 
-// Hace una peticion al servidor para cambiar la foto del usuario
+// Update Photo
 async function handleUpdatePhoto() {
   // Start loading
   isLoading.value = true
@@ -55,7 +55,7 @@ async function handleUpdatePhoto() {
     isLoading.value = false
   }
 }
-
+// Clear form
 function onInputClean() {
   form.value = {
     file: null,

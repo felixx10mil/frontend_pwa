@@ -23,7 +23,7 @@ const form = ref({
 const isLoading = ref(false)
 const maximizedToggle = ref(true)
 
-// Hace una peticion al servidor para actualizar el profile user
+// Update profile
 async function handleUpdateProfile() {
   // Start loading
   isLoading.value = true
@@ -47,6 +47,7 @@ async function handleUpdateProfile() {
   }
 }
 
+// Clear form
 function onInputClean() {
   form.value = {
     first_name: '',

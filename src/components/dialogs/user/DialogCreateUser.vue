@@ -21,7 +21,7 @@ const form = ref({
 const isLoading = ref(false)
 const maximizedToggle = ref(true)
 
-// Hace una peticion al servidor para crear un usuario
+// Register User
 async function handleCreateUser() {
   // Start loading
   isLoading.value = true
@@ -45,6 +45,7 @@ async function handleCreateUser() {
   }
 }
 
+// Clear form
 function onInputClean() {
   form.value = {
     email: '',

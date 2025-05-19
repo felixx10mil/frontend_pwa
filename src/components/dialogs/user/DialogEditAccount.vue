@@ -26,7 +26,7 @@ const form = ref({
 const isLoading = ref(false)
 const maximizedToggle = ref(true)
 
-// Hace una peticion al servidor para actualizar la cuenta
+// Update account
 async function handleUpdateAccount() {
   // Start loading
   isLoading.value = true
@@ -50,6 +50,7 @@ async function handleUpdateAccount() {
   }
 }
 
+// Clear form
 function onInputClean() {
   form.value = {
     currentPassword: '',

@@ -23,7 +23,7 @@ const form = ref({
 const isLoading = ref(false)
 const maximizedToggle = ref(true)
 
-// Hace una peticion al servidor para actualizar la password
+// Update Password
 async function handleUpdatePassword() {
   // Start loading
   isLoading.value = true
@@ -46,7 +46,7 @@ async function handleUpdatePassword() {
     isLoading.value = false
   }
 }
-
+// Clear form
 function onInputClean() {
   form.value = {
     currentPassword: '',

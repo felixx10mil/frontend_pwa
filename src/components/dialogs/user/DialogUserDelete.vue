@@ -18,7 +18,7 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
 const email = ref('')
 const isLoading = ref(false)
 
-// Hace una peticion al servidor para eliminar un usuario validando su email
+// Delete user
 async function handleDeleteUser() {
   // Start loading
   isLoading.value = true

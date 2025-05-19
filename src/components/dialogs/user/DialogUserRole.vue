@@ -1,6 +1,6 @@
 <script setup>
 import { useDialogPluginComponent, useQuasar } from 'quasar'
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { api } from 'boot/axios'
 import useNotify from 'src/composables/UseNotify'
 
@@ -19,14 +19,11 @@ const form = ref({
 const isLoading = ref(false)
 const $q = useQuasar()
 
-onMounted(() => {
-  $q.loading.show({
-    message: 'Loading, please wait...',
-  })
-  handleLoadRoles()
-})
-// Hace una peticion al servidor para obtener los roles del usuario
+// Load roles
 async function handleLoadRoles() {
+  $q.loading.show({
+    message: 'Loading...',
+  })
   try {
     const { data } = await api.get(`admin/users/roles/${props.id}`)
     if (data.status === 'OK') {
@@ -40,7 +37,7 @@ async function handleLoadRoles() {
   }
 }
 
-// Envia al servidor una request con el nuevo array de roles para actualizarlos
+// Update Roles
 async function handleUpdateRole() {
   // Start loading
   isLoading.value = true
@@ -63,6 +60,8 @@ async function handleUpdateRole() {
     isLoading.value = false
   }
 }
+
+handleLoadRoles()
 </script>
 
 <template>
