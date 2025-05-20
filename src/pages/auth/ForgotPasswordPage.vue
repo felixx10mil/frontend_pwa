@@ -36,7 +36,7 @@ function onReset() {
 <template>
   <q-page padding>
     <div class="column items-center justify-center">
-      <img alt="Logo app" src="~assets/forgot-password.svg" style="width: 200px; height: 200px" />
+      <img alt="Logo app" src="~assets/logo-app.svg" style="width: 200px; height: 200px" />
       <q-card class="no-shadow transparent create-card">
         <q-form @submit.prevent="handleForgotPassword">
           <q-card-section>
@@ -59,9 +59,17 @@ function onReset() {
             />
           </q-card-section>
           <q-card-actions vertical align="center" class="q-ma-sm">
-            <q-btn rounded color="primary" type="submit" class="full-width" no-caps
+            <q-btn rounded color="primary" type="submit" class="full-width q-mb-lg" no-caps
               >Send Email</q-btn
             >
+            <p class="text-grey">
+              <router-link
+                class="text-accent"
+                :to="{ name: 'signin' }"
+                style="text-decoration: none"
+                >Back to login</router-link
+              >
+            </p>
           </q-card-actions>
         </q-form>
       </q-card>

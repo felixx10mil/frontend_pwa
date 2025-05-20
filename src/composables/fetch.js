@@ -2,8 +2,7 @@ import { api } from 'src/boot/axios'
 import { readonly, ref } from 'vue'
 
 /**
- * Obtiene los datos de un usuario especifico
- *
+ * Fetch user
  * @param {*} url
  * @returns
  */
@@ -27,8 +26,7 @@ export function useFetchUser(url) {
 }
 
 /**
- * Obtiene los datos de todos los usuarios
- *
+ * Fetch users
  * @param {*} url
  * @returns
  */

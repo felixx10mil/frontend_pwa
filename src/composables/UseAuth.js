@@ -10,7 +10,6 @@ export default function useAuth() {
 
   /**
    * Login user
-   *
    * @param {*} url
    * @param {*} email
    * @param {*} password
@@ -39,7 +38,6 @@ export default function useAuth() {
   }
   /**
    * Register user
-   *
    * @param {*} url
    * @param {*} email
    * @param {*} password
@@ -63,7 +61,6 @@ export default function useAuth() {
 
   /**
    * Forgot password
-   *
    * @param {*} url
    * @param {*} email
    * @returns
@@ -85,7 +82,6 @@ export default function useAuth() {
 
   /**
    * Reset password
-   *
    * @param {*} url
    * @param {*} token
    * @param {*} password
@@ -109,7 +105,6 @@ export default function useAuth() {
 
   /**
    * Reset password
-   *
    * @param {*} url
    * @param {*} token
    * @returns
@@ -130,8 +125,7 @@ export default function useAuth() {
   }
 
   /**
-   * Reset password
-   *
+   * Logout
    * @returns
    */
   async function logout() {

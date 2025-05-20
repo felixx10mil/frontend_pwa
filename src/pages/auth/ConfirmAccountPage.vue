@@ -1,5 +1,4 @@
 <script setup>
-import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import useNotify from 'src/composables/UseNotify'
 import useAuth from 'src/composables/UseAuth.js'
@@ -14,10 +13,6 @@ const router = useRouter()
 const { notifySuccess } = useNotify()
 const { confirmEmail } = useAuth()
 
-onMounted(() => {
-  handleConfirmAccount()
-})
-
 async function handleConfirmAccount() {
   const response = await confirmEmail('auth/confirm/account', props.token)
   if (response && response.status === 'OK') {
@@ -27,6 +22,8 @@ async function handleConfirmAccount() {
     router.push({ name: 'signin' })
   }
 }
+
+handleConfirmAccount()
 </script>
 <template>
   <q-page class="window-height window-width row justify-center items-center">
