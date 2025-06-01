@@ -11,8 +11,8 @@ const { emailRule, passwordRule } = useValidate()
 const { notifySuccess } = useNotify()
 const router = useRouter()
 const form = ref({
-  email: 'felix@example.com',
-  password: '36Felix$',
+  email: '',
+  password: '',
 })
 
 async function handleSignin() {

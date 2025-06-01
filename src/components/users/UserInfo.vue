@@ -7,7 +7,10 @@ defineProps({
   <q-item>
     <q-item-section top avatar>
       <q-avatar rounded>
-        <img crossorigin="anonymous" :src="`http://127.0.0.1:3000/files/${user.profile?.avatar}`" />
+        <img
+          crossorigin="anonymous"
+          :src="`https://api2.eresvisible.com/files/${user.profile?.avatar}`"
+        />
       </q-avatar>
     </q-item-section>
 

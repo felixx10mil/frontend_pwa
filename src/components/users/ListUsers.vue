@@ -29,7 +29,10 @@ const getUsers = computed(() => {
     >
       <q-item-section avatar>
         <q-avatar>
-          <img crossorigin="anonymous" :src="`http://127.0.0.1:3000/files/${profile.avatar}`" />
+          <img
+            crossorigin="anonymous"
+            :src="`https://api2.eresvisible.com/files/${profile.avatar}`"
+          />
         </q-avatar>
       </q-item-section>
       <q-item-section>

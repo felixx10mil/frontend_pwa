@@ -39,7 +39,7 @@ export default defineConfig((ctx) => {
 
       vueRouterMode: 'history', // available values: 'hash', 'history'
       env: {
-        API_URL: ctx.dev ? 'http://127.0.0.1:3000/api/v1/' : 'https://prod.api.com/',
+        API_URL: ctx.dev ? 'http://127.0.0.1:3000/api/v1/' : 'https://api2.eresvisible.com/api/v1/',
       },
       // vueRouterBase,
       // vueDevtools,
