@@ -32,7 +32,7 @@ async function handleDeleteUser() {
 
   // Fetch axios
   try {
-    const { data } = await api.delete(`admin/users/${props.id}`, config)
+    const { data } = await api.delete(`/api/v1/admin/users/${props.id}`, config)
     if (data.status === 'OK') {
       // Message
       notifySuccess(data.message)

@@ -13,7 +13,7 @@ import SettingSkeleton from 'src/components/skeletons/SettingSkeleton.vue'
 
 const $q = useQuasar()
 const store = useAuthStore()
-const { data, refresh } = useFetchUser(`users/${store.getStateId}`)
+const { data, refresh } = useFetchUser(`/api/v1/users/${store.getStateId}`)
 const { logout } = useAuth()
 
 function updatePassword() {

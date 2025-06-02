@@ -33,7 +33,7 @@ async function handleUpdateAccount() {
 
   // Fetch axios
   try {
-    const { data } = await api.patch(`users/account/${store.getStateId}`, form.value)
+    const { data } = await api.patch(`/api/v1/users/account/${store.getStateId}`, form.value)
     if (data.status === 'OK') {
       // Message
       notifySuccess(data.message)

@@ -118,7 +118,7 @@ async function loadUser(index, done) {
         >
           <q-item-section avatar>
             <q-avatar>
-              <img :src="`http://127.0.0.1:3000/${user.profile.avatar}`" />
+              <img :src="`${process.env.API_URL}/${user.profile.avatar}`" />
             </q-avatar>
           </q-item-section>
           <q-item-section>

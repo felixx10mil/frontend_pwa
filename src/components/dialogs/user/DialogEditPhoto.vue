@@ -39,7 +39,7 @@ async function handleUpdatePhoto() {
 
   // Fetch axios
   try {
-    const { data } = await api.patch(`users/photo/${store.getStateId}`, dataForm, config)
+    const { data } = await api.patch(`/api/v1/users/photo/${store.getStateId}`, dataForm, config)
     if (data.status === 'OK') {
       // Message
       notifySuccess(data.message)

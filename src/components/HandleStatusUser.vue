@@ -24,7 +24,7 @@ const updateStatus = async (status) => {
   })
 
   try {
-    const { data } = await api.patch(`admin/users/status/${props.id}`, {
+    const { data } = await api.patch(`/api/v1/admin/users/status/${props.id}`, {
       status: status,
     })
     if (data.status === 'OK') {

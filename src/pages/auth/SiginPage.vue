@@ -16,7 +16,7 @@ const form = ref({
 })
 
 async function handleSignin() {
-  const response = await signin('auth/signin', form.value)
+  const response = await signin('/api/v1/auth/signin', form.value)
   if (response && response.status === 'OK') {
     // Reset form
     onReset()
@@ -39,7 +39,7 @@ function onReset() {
 <template>
   <q-page padding>
     <div class="column items-center justify-center">
-      <img alt="Logo app" src="~assets/logo-app.svg" style="width: 200px; height: 200px" />
+      <img alt="Logo app" src="~assets/mi_logo.svg" style="width: 200px; height: 200px" />
       <q-card class="no-shadow transparent create-card">
         <q-form @submit.prevent="handleSignin">
           <q-card-section>

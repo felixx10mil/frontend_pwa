@@ -30,7 +30,7 @@ async function handleUpdateProfile() {
 
   // Fetch axios
   try {
-    const { data } = await api.patch(`users/profile/${store.getStateId}`, form.value)
+    const { data } = await api.patch(`/api/v1/users/profile/${store.getStateId}`, form.value)
     if (data.status === 'OK') {
       // Message
       notifySuccess(data.message)

@@ -14,7 +14,7 @@ const { notifySuccess } = useNotify()
 const { confirmEmail } = useAuth()
 
 async function handleConfirmAccount() {
-  const response = await confirmEmail('auth/confirm/account', props.token)
+  const response = await confirmEmail('/api/v1/auth/confirm/account', props.token)
   if (response && response.status === 'OK') {
     // Message
     notifySuccess(response.message)

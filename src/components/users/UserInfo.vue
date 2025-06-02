@@ -1,16 +1,17 @@
 <script setup>
+import { computed } from 'vue'
+
 defineProps({
   user: { type: Object, required: true },
 })
+// return url api
+const url_base = computed(() => process.env.API_URL)
 </script>
 <template>
   <q-item>
     <q-item-section top avatar>
       <q-avatar rounded>
-        <img
-          crossorigin="anonymous"
-          :src="`https://api2.eresvisible.com/files/${user.profile?.avatar}`"
-        />
+        <img crossorigin="anonymous" :src="`${url_base}/files/${user.profile?.avatar}`" />
       </q-avatar>
     </q-item-section>
 

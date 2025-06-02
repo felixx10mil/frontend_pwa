@@ -31,7 +31,7 @@ async function handleGetUsers(page = 1, size = 6) {
     params: { page, size },
   }
   try {
-    const { data } = await api.get('admin/users', config)
+    const { data } = await api.get('/api/v1/admin/users', config)
     if (data.status === 'OK') {
       users.value = data.data.items
       totalPages.value = data.data.totalPages

@@ -14,7 +14,7 @@ const form = ref({
 })
 
 async function handleForgotPassword() {
-  const response = await forgotPassword('auth/forgot/password', form.value)
+  const response = await forgotPassword('/api/v1/auth/forgot/password', form.value)
   if (response && response.status === 'OK') {
     // Reset form
     onReset()
@@ -36,7 +36,7 @@ function onReset() {
 <template>
   <q-page padding>
     <div class="column items-center justify-center">
-      <img alt="Logo app" src="~assets/logo-app.svg" style="width: 200px; height: 200px" />
+      <img alt="Logo app" src="~assets/mi_logo.svg" style="width: 200px; height: 200px" />
       <q-card class="no-shadow transparent create-card">
         <q-form @submit.prevent="handleForgotPassword">
           <q-card-section>

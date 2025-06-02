@@ -11,12 +11,16 @@ watchEffect(() => {
   users.value = props.data
 })
 
+// Return data filtered
 const getUsers = computed(() => {
   if (filter.value === '') {
     return users.value
   }
   return users.value.filter((user) => user.email.toLowerCase().includes(filter.value.toLowerCase()))
 })
+
+// return url api
+const url_base = computed(() => process.env.API_URL)
 </script>
 <template>
   <q-list>
@@ -29,10 +33,7 @@ const getUsers = computed(() => {
     >
       <q-item-section avatar>
         <q-avatar>
-          <img
-            crossorigin="anonymous"
-            :src="`https://api2.eresvisible.com/files/${profile.avatar}`"
-          />
+          <img crossorigin="anonymous" :src="`${url_base}/files/${profile.avatar}`" />
         </q-avatar>
       </q-item-section>
       <q-item-section>

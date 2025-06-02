@@ -17,7 +17,7 @@ const form = ref({
   confirmPassword: '',
 })
 async function handleSignup() {
-  const response = await signup('auth/signup', form.value)
+  const response = await signup('/api/v1/auth/signup', form.value)
   if (response && response.status === 'OK') {
     // Reset form
     onReset()
@@ -40,7 +40,7 @@ function onReset() {
 <template>
   <q-page padding>
     <div class="column items-center justify-center">
-      <img alt="Logo app" src="~assets/logo-app.svg" style="width: 200px; height: 200px" />
+      <img alt="Logo app" src="~assets/mi_logo.svg" style="width: 200px; height: 200px" />
       <q-card class="no-shadow transparent create-card">
         <q-form @submit.prevent="handleSignup">
           <q-card-section>

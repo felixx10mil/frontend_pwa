@@ -28,7 +28,7 @@ async function handleCreateUser() {
 
   // Fetch axios
   try {
-    const { data } = await api.post(`auth/signup`, form.value)
+    const { data } = await api.post(`/api/v1/auth/signup`, form.value)
     if (data.status === 'OK') {
       // Message
       notifySuccess(data.message)

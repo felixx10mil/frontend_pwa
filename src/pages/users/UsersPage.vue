@@ -9,7 +9,7 @@ import UsersSkeleton from 'src/components/skeletons/UsersSkeleton.vue'
 
 const $q = useQuasar()
 const search = ref('')
-const { data, refresh } = useFetchUsers('admin/users')
+const { data, refresh } = useFetchUsers('/api/v1/admin/users')
 provide('search', search)
 
 // Create user

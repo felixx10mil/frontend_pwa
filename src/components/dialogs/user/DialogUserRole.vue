@@ -25,7 +25,7 @@ async function handleLoadRoles() {
     message: 'Loading...',
   })
   try {
-    const { data } = await api.get(`admin/users/roles/${props.id}`)
+    const { data } = await api.get(`/api/v1/admin/users/roles/${props.id}`)
     if (data.status === 'OK') {
       optionsRoles.value = data.roles.roleAll
       form.value.roles = data.roles.roleByUser
@@ -44,7 +44,7 @@ async function handleUpdateRole() {
 
   // Fetch axios
   try {
-    const { data } = await api.put(`admin/users/roles/${props.id}`, form.value)
+    const { data } = await api.put(`/api/v1/admin/users/roles/${props.id}`, form.value)
     if (data.status === 'OK') {
       // Reload roles
       handleLoadRoles()

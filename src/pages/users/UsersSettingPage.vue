@@ -17,7 +17,7 @@ const props = defineProps({
 
 const $q = useQuasar()
 const router = useRouter()
-const { data } = useFetchUser(`users/${props.id}`)
+const { data } = useFetchUser(`/api/v1/users/${props.id}`)
 
 // Update roles
 function updateRoles() {

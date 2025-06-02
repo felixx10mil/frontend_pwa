@@ -2,8 +2,8 @@
 <template>
   <q-page padding>
     <div class="column items-center justify-center">
-      <img alt="Quasar logo" src="~assets/hello.svg" style="width: 250px; height: 250px" />
-      <q-card class="no-shadow transparent create-card">
+      <img alt="Quasar logo" src="~assets/mi_logo.svg" style="width: 250px; height: 250px" />
+      <q-card class="no-shadow transparent create-card q-mt-xl">
         <q-card-section>
           <div class="text-h4 text-weight-bold">Name app</div>
           <div class="text-subtitle1">Everything you need in one place.</div>

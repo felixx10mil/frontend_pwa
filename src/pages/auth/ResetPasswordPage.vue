@@ -25,7 +25,7 @@ const form = ref({
 })
 
 async function handleResetPassword() {
-  const response = await resetPassword('auth/reset/password', form.value)
+  const response = await resetPassword('/api/v1/auth/reset/password', form.value)
   if (response && response.status === 'OK') {
     // Clean form input
     onReset()
@@ -52,7 +52,7 @@ function onReset() {
 <template>
   <q-page padding>
     <div class="column items-center justify-center">
-      <img alt="Logo app" src="~assets/logo-app.svg" style="width: 200px; height: 200px" />
+      <img alt="Logo app" src="~assets/mi_logo.svg" style="width: 200px; height: 200px" />
       <q-card class="no-shadow transparent create-card">
         <q-form @submit.prevent="handleResetPassword">
           <q-card-section>

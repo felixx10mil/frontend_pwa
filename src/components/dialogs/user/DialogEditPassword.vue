@@ -30,7 +30,7 @@ async function handleUpdatePassword() {
 
   // Fetch axios
   try {
-    const { data } = await api.patch(`users/password/${store.getStateId}`, form.value)
+    const { data } = await api.patch(`/api/v1/users/password/${store.getStateId}`, form.value)
     if (data.status === 'OK') {
       // Message
       notifySuccess(data.message)
