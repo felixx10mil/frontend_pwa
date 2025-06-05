@@ -14,7 +14,7 @@ defineEmits([...useDialogPluginComponent.emits])
 const store = useAuthStore()
 const { notifySuccess } = useNotify()
 const { passwordRule } = useValidate()
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 const form = ref({
   currentPassword: '',
   newPassword: '',
@@ -128,7 +128,6 @@ const onUpdateModalSize = (value) => {
               <q-btn
                 label="Update"
                 type="submit"
-                :outline="$q.dark.isActive ? true : false"
                 rounded
                 :loading="isLoading"
                 color="primary"
@@ -138,6 +137,14 @@ const onUpdateModalSize = (value) => {
                   <q-spinner-facebook />
                 </template>
               </q-btn>
+              <q-btn
+                label="Cancel"
+                outline
+                rounded
+                color="grey-9"
+                class="full-width q-mb-lg"
+                @click="onDialogCancel"
+              />
             </div>
           </div>
         </q-form>

@@ -87,7 +87,6 @@ async function handleDeleteUser() {
               <q-btn
                 label="Delete"
                 type="submit"
-                :outline="$q.dark.isActive ? true : false"
                 rounded
                 :loading="isLoading"
                 color="red"
@@ -99,9 +98,9 @@ async function handleDeleteUser() {
               </q-btn>
               <q-btn
                 label="Cancel"
-                :outline="$q.dark.isActive ? true : false"
+                outline
                 rounded
-                color="blue-grey"
+                color="grey-9"
                 class="full-width q-mb-lg"
                 @click="onDialogCancel"
               />
