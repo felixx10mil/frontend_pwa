@@ -11,9 +11,10 @@ import useValidate from 'src/composables/UseValidate'
 defineEmits([...useDialogPluginComponent.emits])
 
 const { notifySuccess } = useNotify()
-const { emailRule, passwordRule } = useValidate()
+const { fullNameRule, emailRule, passwordRule } = useValidate()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 const form = ref({
+  fullName: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -71,13 +72,25 @@ const onUpdateModalSize = (value) => {
   >
     <q-card class="q-dialog-plugin">
       <bar-dialog
-        title="New user"
+        title="Register user"
         :maximizedToggle="maximizedToggle"
         @updateModalSize="onUpdateModalSize"
       />
       <q-card-section>
         <q-form class="row justify-center full-width" @submit.prevent="handleCreateUser">
           <div class="col-12 q-gutter-y-md">
+            <BaseInput
+              icon="person"
+              v-model="form.fullName"
+              label="fullName"
+              type="text"
+              lazy-rules
+              :rules="[
+                (val) => (val && val.length > 0) || 'The fullname field is required.',
+                (val) => fullNameRule(val) || 'The fullName field must contain a space.',
+              ]"
+            />
+
             <BaseInput
               icon="alternate_email"
               v-model="form.email"

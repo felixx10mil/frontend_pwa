@@ -23,5 +23,17 @@ export default function useValidate() {
     return true
   }
 
-  return { emailRule, passwordRule }
+  /**
+   * FullName string
+   * @param {*} fullName
+   * @returns
+   */
+  const fullNameRule = (fullName) => {
+    if (!/^([\w]{4,})+\s+([\w\s]{4,})+$/.test(fullName)) {
+      return 'FullName is invalid'
+    }
+    return true
+  }
+
+  return { fullNameRule, emailRule, passwordRule }
 }

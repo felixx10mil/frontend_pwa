@@ -44,13 +44,13 @@ export default function useAuth() {
    * @param {*} confirmPassword
    * @returns
    */
-  async function signup(url, { email, password, confirmPassword }) {
+  async function signup(url, { fullName, email, password, confirmPassword }) {
     $q.loading.show({
       message: 'Loading...',
     })
 
     try {
-      const { data } = await api.post(url, { email, password, confirmPassword })
+      const { data } = await api.post(url, { fullName, email, password, confirmPassword })
       return data
     } catch (err) {
       if (err) console.log('Oops!')

@@ -9,9 +9,10 @@ import useAuth from 'src/composables/UseAuth.js'
 
 const { signup } = useAuth()
 const { notifySuccess } = useNotify()
-const { emailRule, passwordRule } = useValidate()
+const { fullNameRule, emailRule, passwordRule } = useValidate()
 const router = useRouter()
 const form = ref({
+  fullName: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -48,6 +49,18 @@ function onReset() {
             <div class="text-subtitle1" style="opacity: 0.4">Enter your personal information.</div>
           </q-card-section>
           <q-card-section class="column q-gutter-sm">
+            <BaseInput
+              icon="person"
+              v-model="form.fullName"
+              label="fullName"
+              type="text"
+              lazy-rules
+              :rules="[
+                (val) => (val && val.length > 0) || 'The fullname field is required.',
+                (val) => fullNameRule(val) || 'The fullName field must contain a space.',
+              ]"
+            />
+
             <BaseInput
               icon="alternate_email"
               v-model="form.email"
