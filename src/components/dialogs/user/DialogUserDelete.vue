@@ -61,20 +61,15 @@ async function handleDeleteUser() {
   >
     <q-card class="q-dialog-plugin">
       <q-card-section>
-        <div class="text-h6">Permanently delete this account?</div>
+        <div class="text-h6">Delete</div>
       </q-card-section>
-
-      <q-card-section class="q-pt-none">
-        All services related to this account will be deleted.
-      </q-card-section>
-
       <q-card-section>
         <q-form class="row justify-center full-width" @submit.prevent="handleDeleteUser">
           <div class="col-12 q-gutter-y-md">
             <BaseInput
               icon="email"
               v-model="email"
-              label="Confirm email"
+              label="Confirm with email"
               type="email"
               lazy-rules
               :rules="[

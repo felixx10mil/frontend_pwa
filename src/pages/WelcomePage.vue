@@ -1,18 +1,46 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+
+const slide = ref('style')
+const lorem =
+  'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet accusamus possimus voluptatem at? Distinctio sint animi quos voluptatibus dolorem. Rerum, libero cum? Euma nimi mollitia quod earum, officia amet ipsa?'
+</script>
 <template>
   <q-page padding>
     <div class="column items-center justify-center">
       <img alt="Quasar logo" src="~assets/mi_logo.svg" style="width: 250px; height: 250px" />
-      <q-card class="no-shadow transparent create-card q-mt-xl">
-        <q-card-section>
-          <div class="text-h4 text-weight-bold">Name app</div>
-          <div class="text-subtitle1">Everything you need in one place.</div>
-          <div class="text-subtitle2" style="opacity: 0.4">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet accusamus possimus
-            voluptatem at? Distinctio sint animi quos voluptatibus dolorem. Rerum, libero cum? Eum
-            animi mollitia quod earum, officia amet ipsa?
-          </div>
-        </q-card-section>
+      <q-card class="no-shadow transparent create-card">
+        <div class="q-pa-md">
+          <q-carousel
+            v-model="slide"
+            swipeable
+            animated
+            navigation
+            padding
+            height="400px"
+            class="bg-transparent text-white rounded-borders"
+          >
+            <q-carousel-slide name="style" class="column no-wrap flex-center">
+              <q-icon name="people" size="128px" />
+              <div class="q-mt-md text-center">
+                {{ lorem }}
+              </div>
+            </q-carousel-slide>
+            <q-carousel-slide name="tv" class="column no-wrap flex-center">
+              <q-icon name="paid" size="128px" />
+              <div class="q-mt-md text-center">
+                {{ lorem }}
+              </div>
+            </q-carousel-slide>
+            <q-carousel-slide name="layers" class="column no-wrap flex-center">
+              <q-icon name="task_alt" size="128px" />
+              <div class="q-mt-md text-center">
+                {{ lorem }}
+              </div>
+            </q-carousel-slide>
+          </q-carousel>
+        </div>
+
         <q-card-actions vertical align="center">
           <q-btn rounded color="primary" class="full-width q-mb-sm" to="/signin" no-caps
             >Sign in</q-btn

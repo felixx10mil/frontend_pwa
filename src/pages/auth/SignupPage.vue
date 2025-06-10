@@ -52,7 +52,7 @@ function onReset() {
             <BaseInput
               icon="person"
               v-model="form.fullName"
-              label="fullName"
+              label="First and last name"
               type="text"
               lazy-rules
               :rules="[
