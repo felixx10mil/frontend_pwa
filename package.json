@@ -1,9 +1,9 @@
 {
-  "name": "q-auth",
+  "name": "project_auth",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "Admin",
-  "author": "felixdev",
+  "productName": "PROJECT AUTH",
+  "author": "felidev",
   "type": "module",
   "private": true,
   "scripts": {

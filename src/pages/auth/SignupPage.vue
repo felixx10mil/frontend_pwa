@@ -41,7 +41,7 @@ function onReset() {
 <template>
   <q-page padding>
     <div class="column items-center justify-center">
-      <img alt="Logo app" src="~assets/mi_logo.svg" style="width: 200px; height: 200px" />
+      <img alt="Logo app" src="~assets/mi_logo_app.svg" style="width: 200px; height: 200px" />
       <q-card class="no-shadow transparent create-card">
         <q-form @submit.prevent="handleSignup">
           <q-card-section>

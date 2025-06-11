@@ -32,7 +32,7 @@ register(process.env.SERVICE_WORKER_FILE, {
     // console.log('New content is available; please refresh.')
     Notify({
       message: 'There is a new update.',
-      icon: 'las la-cloud-download-alt',
+      icon: 'refresh',
       closeBtn: 'Update',
       timeout: 10000,
       onDismiss() {

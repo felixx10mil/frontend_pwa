@@ -8,7 +8,7 @@ const lorem =
 <template>
   <q-page padding>
     <div class="column items-center justify-center">
-      <img alt="Quasar logo" src="~assets/mi_logo.svg" style="width: 250px; height: 250px" />
+      <img alt="Quasar logo" src="~assets/mi_logo_app.svg" style="width: 250px; height: 250px" />
       <q-card class="no-shadow transparent create-card">
         <div class="q-pa-md">
           <q-carousel
