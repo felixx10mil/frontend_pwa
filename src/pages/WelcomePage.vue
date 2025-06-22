@@ -21,13 +21,13 @@ const lorem =
             class="bg-transparent text-white rounded-borders"
           >
             <q-carousel-slide name="style" class="column no-wrap flex-center">
-              <q-icon name="people" size="128px" />
+              <q-icon name="person_search" size="128px" />
               <div class="q-mt-md text-center">
                 {{ lorem }}
               </div>
             </q-carousel-slide>
             <q-carousel-slide name="tv" class="column no-wrap flex-center">
-              <q-icon name="paid" size="128px" />
+              <q-icon name="payments" size="128px" />
               <div class="q-mt-md text-center">
                 {{ lorem }}
               </div>

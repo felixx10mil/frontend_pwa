@@ -10,26 +10,9 @@ import { Notify } from 'quasar'
 // "export default () => {}" function below (which runs individually
 // for each client)
 
-const api = axios.create({
-  baseURL: process.env.API_URL,
-  headers: {
-    'Access-Control-Allow-Origin': '*',
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true,
-})
+const api = axios.create({ baseURL: process.env.API_URL })
 
-export default defineBoot(async ({ router, app, store }) => {
-  // for use inside Vue files (Options API) through this.$axios and this.$api
-
-  app.config.globalProperties.$axios = axios
-  // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
-  //       so you won't necessarily have to import axios in each vue file
-
-  app.config.globalProperties.$api = api
-  // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
-  //       so you can easily perform requests against your app's API
-
+export default defineBoot(({ router, app, store }) => {
   // Store
   const userStore = useAuthStore(store)
 
@@ -60,7 +43,7 @@ export default defineBoot(async ({ router, app, store }) => {
               handler: () => {
                 if (status === 401) {
                   router.push({ name: 'signin' })
-                  // userStore.$reset()
+                  userStore.$reset()
                 }
               },
             },
@@ -88,6 +71,16 @@ export default defineBoot(async ({ router, app, store }) => {
       return Promise.reject(error)
     },
   )
+
+  // for use inside Vue files (Options API) through this.$axios and this.$api
+
+  app.config.globalProperties.$axios = axios
+  // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
+  //       so you won't necessarily have to import axios in each vue file
+
+  app.config.globalProperties.$api = api
+  // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
+  //       so you can easily perform requests against your app's API
 })
 
 export { api }
