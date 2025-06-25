@@ -1,9 +1,16 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { navs } from 'src/router/navs'
+import { useQuasar } from 'quasar'
 import FooterToolbar from 'src/components/footers/FooterToolbar.vue'
 
 const leftDrawerOpen = ref(false)
+const $q = useQuasar()
+
+onMounted(() => {
+  const darkMode = $q.localStorage.getItem('darkMode')
+  $q.dark.set(darkMode)
+})
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value

@@ -1,5 +1,14 @@
 <script setup>
 import DarkMode from 'src/components/DarkMode.vue'
+import { onMounted } from 'vue'
+import { useQuasar } from 'quasar'
+
+const $q = useQuasar()
+
+onMounted(() => {
+  const darkMode = $q.localStorage.getItem('darkMode')
+  $q.dark.set(darkMode)
+})
 </script>
 <template>
   <q-layout view="lHh Lpr lFf">

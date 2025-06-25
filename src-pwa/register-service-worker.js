@@ -36,7 +36,7 @@ register(process.env.SERVICE_WORKER_FILE, {
       closeBtn: 'Update',
       timeout: 10000,
       onDismiss() {
-        location.reload(true)
+        window.location.reload()
       },
     })
   },

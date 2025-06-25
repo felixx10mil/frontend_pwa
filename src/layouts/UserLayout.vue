@@ -1,6 +1,15 @@
 <script setup>
+import { onMounted } from 'vue'
+import { useQuasar } from 'quasar'
 import HeaderBack from 'src/components/headers/HeaderBack.vue'
 import FooterToolbar from 'src/components/footers/FooterToolbar.vue'
+
+const $q = useQuasar()
+
+onMounted(() => {
+  const darkMode = $q.localStorage.getItem('darkMode')
+  $q.dark.set(darkMode)
+})
 </script>
 
 <template>

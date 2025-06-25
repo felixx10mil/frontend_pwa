@@ -1,29 +1,27 @@
 <script setup>
-import BaseInput from 'src/components/form/BaseInput.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import useNotify from 'src/composables/UseNotify.js'
+import useNotify from 'src/composables/UseNotify'
+import BaseInput from 'src/components/form/BaseInput.vue'
 import useValidate from 'src/composables/UseValidate.js'
-import useAuth from 'src/composables/UseAuth'
-
-const { signin } = useAuth()
-const { emailRule, passwordRule } = useValidate()
+import useAuth from 'src/composables/UseAuth.js'
+const { signinTwo } = useAuth()
 const { notifySuccess } = useNotify()
+const { emailRule } = useValidate()
 const router = useRouter()
 const form = ref({
   email: '',
-  password: '',
 })
 
-async function handleSignin() {
-  const response = await signin('/api/v1/auth/signin', form.value)
+async function handleForgotPassword() {
+  const response = await signinTwo('/api/v1/auth/signinTwo', form.value)
   if (response && response.status === 'OK') {
     // Reset form
     onReset()
     // Message
     notifySuccess(response.message)
     // Redirect
-    router.push({ name: 'home' })
+    router.push({ name: 'signinByEmail' })
   }
 }
 
@@ -31,7 +29,6 @@ async function handleSignin() {
 function onReset() {
   form.value = {
     email: '',
-    password: '',
   }
 }
 </script>
@@ -41,14 +38,14 @@ function onReset() {
     <div class="column items-center justify-center">
       <img alt="Logo app" src="~assets/mi_logo_app.svg" style="width: 200px; height: 200px" />
       <q-card class="no-shadow transparent create-card">
-        <q-form @submit.prevent="handleSignin">
+        <q-form @submit.prevent="handleForgotPassword">
           <q-card-section>
-            <div class="text-h6 text-weight-bold">Sing in</div>
+            <div class="text-h6 text-weight-bold">Signin by email</div>
             <div class="text-subtitle1" style="opacity: 0.4">
-              Sign in to continue using the application.
+              No worries. Please enter the email address associated with your account.
             </div>
           </q-card-section>
-          <q-card-section class="column q-gutter-sm">
+          <q-card-section>
             <BaseInput
               icon="alternate_email"
               v-model="form.email"
@@ -60,34 +57,17 @@ function onReset() {
                 (val) => emailRule(val) || 'The email is invalid.',
               ]"
             />
-            <BaseInput
-              icon="lock"
-              v-model="form.password"
-              label="Password"
-              type="password"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The password field is required.',
-                (val) => passwordRule(val) || 'The password field must be between 7 and 12 digits.',
-              ]"
-            />
-            <p class="text-right">
-              <router-link class="text-accent" style="text-decoration: none" to="/forgot/password"
-                >Forgot password?</router-link
-              >
-            </p>
           </q-card-section>
-          <q-card-actions vertical align="center">
+          <q-card-actions vertical align="center" class="q-ma-sm">
             <q-btn rounded color="primary" type="submit" class="full-width q-mb-lg" no-caps
-              >Sign in</q-btn
+              >Send Email</q-btn
             >
             <p class="text-grey">
-              Don't have an account?
               <router-link
                 class="text-accent"
-                :to="{ name: 'signup' }"
+                :to="{ name: 'signin' }"
                 style="text-decoration: none"
-                >Sign up</router-link
+                >Back to login</router-link
               >
             </p>
           </q-card-actions>

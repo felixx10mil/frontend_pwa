@@ -16,9 +16,10 @@ const lorem =
             swipeable
             animated
             navigation
+            control-color="grey-7"
             padding
             height="400px"
-            class="bg-transparent text-white rounded-borders"
+            class="bg-transparent text-grey-7 rounded-borders"
           >
             <q-carousel-slide name="style" class="column no-wrap flex-center">
               <q-icon name="person_search" size="128px" />

@@ -10,7 +10,11 @@ import { Notify } from 'quasar'
 // "export default () => {}" function below (which runs individually
 // for each client)
 
-const api = axios.create({ baseURL: process.env.API_URL })
+const api = axios.create({
+  baseURL: process.env.API_URL,
+  'Content-Type': 'application/json;charset=UTF-8',
+  timeout: 10000, // Timeout
+})
 
 export default defineBoot(({ router, app, store }) => {
   // Store

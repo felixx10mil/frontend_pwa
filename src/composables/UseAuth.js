@@ -15,13 +15,21 @@ export default function useAuth() {
    * @param {*} password
    * @returns
    */
-
   async function signin(url, { email, password }) {
     $q.loading.show({
       message: 'Loading...',
     })
     try {
-      const { data } = await api.post(url, { email, password })
+      // Enviar una petición POST
+      const { data } = await api({
+        method: 'post',
+        url: url,
+        data: {
+          email,
+          password,
+        },
+      })
+
       // Set store auth
       store.$patch({
         isAuth: true,
@@ -36,6 +44,68 @@ export default function useAuth() {
       $q.loading.hide()
     }
   }
+
+  /**
+   * Signin Two
+   * @param {*} url
+   * @param {*} email
+   * @returns
+   */
+  async function signinTwo(url, { email }) {
+    $q.loading.show({
+      message: 'Loading...',
+    })
+    try {
+      // Enviar una petición POST
+      const { data } = await api({
+        method: 'post',
+        url: url,
+        data: { email },
+      })
+
+      return { status: data.status, message: data.message }
+    } catch (err) {
+      if (err) console.log('Oops!')
+    } finally {
+      $q.loading.hide()
+    }
+  }
+
+  /**
+   * Signin Two Check
+   * @param {*} url
+   * @param {*} token
+   * @returns
+   */
+  async function signinTwoCheck(url, token) {
+    $q.loading.show({
+      message: 'Loading...',
+    })
+    try {
+      // Enviar una petición POST
+      const { data } = await api({
+        method: 'post',
+        url: url,
+        data: {
+          token,
+        },
+      })
+
+      // Set store auth
+      store.$patch({
+        isAuth: true,
+        id: data.data.user.id,
+        name: data.data.user.name,
+        token: data.data.key,
+      })
+      return { status: data.status, message: data.message }
+    } catch (err) {
+      if (err) console.log('Oops!')
+    } finally {
+      $q.loading.hide()
+    }
+  }
+
   /**
    * Register user
    * @param {*} url
@@ -50,7 +120,17 @@ export default function useAuth() {
     })
 
     try {
-      const { data } = await api.post(url, { fullName, email, password, confirmPassword })
+      // Enviar una petición POST
+      const { data } = await api({
+        method: 'post',
+        url: url,
+        data: {
+          fullName,
+          email,
+          password,
+          confirmPassword,
+        },
+      })
       return data
     } catch (err) {
       if (err) console.log('Oops!')
@@ -71,7 +151,15 @@ export default function useAuth() {
     })
 
     try {
-      const { data } = await api.post(url, { email })
+      // Enviar una petición POST
+      const { data } = await api({
+        method: 'post',
+        url: url,
+        data: {
+          email,
+        },
+      })
+
       return data
     } catch (err) {
       if (err) console.log('Oops!')
@@ -94,7 +182,16 @@ export default function useAuth() {
     })
 
     try {
-      const { data } = await api.post(url, { token, password, confirmPassword })
+      // Enviar una petición POST
+      const { data } = await api({
+        method: 'post',
+        url: url,
+        data: {
+          token,
+          password,
+          confirmPassword,
+        },
+      })
       return data
     } catch (err) {
       if (err) console.log('Oops!')
@@ -115,7 +212,14 @@ export default function useAuth() {
     })
 
     try {
-      const { data } = await api.post(url, { token })
+      // Enviar una petición POST
+      const { data } = await api({
+        method: 'post',
+        url: url,
+        data: {
+          token,
+        },
+      })
       return data
     } catch (err) {
       if (err) console.log('Oops!')
@@ -140,5 +244,14 @@ export default function useAuth() {
     })
   }
 
-  return { signin, signup, forgotPassword, resetPassword, confirmEmail, logout }
+  return {
+    signin,
+    signinTwo,
+    signinTwoCheck,
+    signup,
+    forgotPassword,
+    resetPassword,
+    confirmEmail,
+    logout,
+  }
 }

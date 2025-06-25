@@ -15,7 +15,26 @@ const routes = [
       {
         path: '/signin',
         name: 'signin',
-        component: () => import('src/pages/auth/SiginPage.vue'),
+        component: () => import('src/pages/auth/SigninPage.vue'),
+        meta: {
+          requiresAuth: false,
+        },
+      },
+      {
+        path: '/signin/by/email',
+        name: 'signinByEmail',
+        component: () => import('src/pages/auth/SigninTwoPage.vue'),
+        meta: {
+          requiresAuth: false,
+        },
+      },
+      {
+        path: '/signin/two/check',
+        name: 'signinTwoCheck',
+        props: (route) => ({
+          token: route.query.token,
+        }),
+        component: () => import('src/pages/auth/SigninTwoCheckPage.vue'),
         meta: {
           requiresAuth: false,
         },
