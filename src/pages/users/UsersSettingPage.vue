@@ -1,5 +1,6 @@
 <script setup>
-import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useFetchUser } from 'src/composables/fetch.js'
 import DialogUserDelete from 'src/components/dialogs/user/DialogUserDelete.vue'
@@ -8,23 +9,22 @@ import UserInfo from 'src/components/users/UserInfo.vue'
 import HandleStatusUser from 'src/components/HandleStatusUser.vue'
 import SettingSkeleton from 'src/components/skeletons/SettingSkeleton.vue'
 
-const props = defineProps({
-  id: {
-    type: Number,
-    required: true,
-  },
-})
-
 const $q = useQuasar()
 const router = useRouter()
-const { data } = useFetchUser(`/api/v1/users/${props.id}`)
+const route = useRoute()
+
+// Returns the processed parameter
+const userId = computed(() => parseInt(route.params.id))
+
+// Return data user
+const { data } = useFetchUser(`/api/v1/users/${userId.value}`)
 
 // Update roles
 function updateRoles() {
   $q.dialog({
     component: DialogUserRole,
     componentProps: {
-      id: props.id,
+      id: userId.value,
     },
   })
     .onOk(() => {})
@@ -35,7 +35,7 @@ function userDelete() {
   $q.dialog({
     component: DialogUserDelete,
     componentProps: {
-      id: props.id,
+      id: userId.value,
     },
   })
     .onOk(() => {
@@ -62,7 +62,7 @@ function userDelete() {
         </q-item-section>
         <q-item-section side top>
           <!-- Recibe props id,statusUser -->
-          <HandleStatusUser :id="id" :statusUser="data.status" />
+          <HandleStatusUser :id="userId" :statusUser="data.status" />
         </q-item-section>
       </q-item>
       <q-item clickable v-ripple @click="updateRoles">

@@ -102,11 +102,6 @@ const routes = [
       {
         path: 'users/:id/settings',
         name: 'users.settings',
-        props(route) {
-          return {
-            id: parseInt(route.params.id),
-          }
-        },
         component: () => import('src/pages/users/UsersSettingPage.vue'),
         meta: {
           title: 'Setting',

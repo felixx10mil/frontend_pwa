@@ -27,7 +27,7 @@ const url_base = computed(() => process.env.API_URL)
     <q-item
       clickable
       v-ripple
-      v-for="{ id, name, email, profile } in getUsers"
+      v-for="{ id, name, email, status, email_verified_at, profile } in getUsers"
       :key="id"
       :to="{ name: 'users.settings', params: { id: id } }"
     >
@@ -37,9 +37,21 @@ const url_base = computed(() => process.env.API_URL)
         </q-avatar>
       </q-item-section>
       <q-item-section>
-        <q-item-label>{{ name }}</q-item-label>
+        <q-item-label
+          >{{ name }}
+          <q-icon
+            :name="status === 'active' ? 'done_all' : 'done_all'"
+            :color="status === 'active' ? 'positive' : 'negative'"
+            size="16px"
+          />
+        </q-item-label>
         <q-item-label caption>
           {{ email }}
+          <q-icon
+            :name="email_verified_at ? 'done_all' : 'done_all'"
+            :color="email_verified_at ? 'positive' : 'negative'"
+            size="16px"
+          />
         </q-item-label>
       </q-item-section>
     </q-item>
