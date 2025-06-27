@@ -1,20 +1,16 @@
 <script setup>
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import useNotify from 'src/composables/UseNotify'
 import useAuth from 'src/composables/UseAuth.js'
 
-const props = defineProps({
-  token: {
-    type: String,
-    required: true,
-  },
-})
 const router = useRouter()
+const route = useRoute()
+
 const { notifySuccess } = useNotify()
 const { confirmEmail } = useAuth()
 
 async function handleConfirmAccount() {
-  const response = await confirmEmail('/api/v1/auth/confirm/account', props.token)
+  const response = await confirmEmail('/api/v1/auth/confirm/account', route.params.token)
   if (response && response.status === 'OK') {
     // Message
     notifySuccess(response.message)

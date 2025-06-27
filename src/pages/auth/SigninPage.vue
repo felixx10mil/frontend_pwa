@@ -89,7 +89,7 @@ function onReset() {
               class="full-width q-mb-lg"
               to="/signin/by/email"
               no-caps
-              >Signin by email</q-btn
+              >Sign in by e-mail</q-btn
             >
 
             <p class="text-grey">

@@ -42,7 +42,7 @@ function onReset() {
           <q-card-section>
             <div class="text-h6 text-weight-bold">Forgot Password?</div>
             <div class="text-subtitle1" style="opacity: 0.4">
-              No worries. Please enter the email address associated with your account.
+              Enter the e-mail address associated with your account.
             </div>
           </q-card-section>
           <q-card-section>

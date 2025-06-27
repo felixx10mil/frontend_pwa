@@ -5,7 +5,7 @@ import useNotify from 'src/composables/UseNotify'
 import BaseInput from 'src/components/form/BaseInput.vue'
 import useValidate from 'src/composables/UseValidate.js'
 import useAuth from 'src/composables/UseAuth.js'
-const { signinTwo } = useAuth()
+const { sendAuthEmail } = useAuth()
 const { notifySuccess } = useNotify()
 const { emailRule } = useValidate()
 const router = useRouter()
@@ -14,7 +14,7 @@ const form = ref({
 })
 
 async function handleForgotPassword() {
-  const response = await signinTwo('/api/v1/auth/signinTwo', form.value)
+  const response = await sendAuthEmail('/api/v1/auth/send/authEmail', form.value)
   if (response && response.status === 'OK') {
     // Reset form
     onReset()
@@ -40,9 +40,9 @@ function onReset() {
       <q-card class="no-shadow transparent create-card">
         <q-form @submit.prevent="handleForgotPassword">
           <q-card-section>
-            <div class="text-h6 text-weight-bold">Signin by email</div>
+            <div class="text-h6 text-weight-bold">Sign in by e-mail</div>
             <div class="text-subtitle1" style="opacity: 0.4">
-              No worries. Please enter the email address associated with your account.
+              Enter the e-mail address associated with your account.
             </div>
           </q-card-section>
           <q-card-section>

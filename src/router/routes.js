@@ -23,18 +23,15 @@ const routes = [
       {
         path: '/signin/by/email',
         name: 'signinByEmail',
-        component: () => import('src/pages/auth/SigninTwoPage.vue'),
+        component: () => import('src/pages/auth/SigninByEmailPage.vue'),
         meta: {
           requiresAuth: false,
         },
       },
       {
-        path: '/signin/two/check',
-        name: 'signinTwoCheck',
-        props: (route) => ({
-          token: route.query.token,
-        }),
-        component: () => import('src/pages/auth/SigninTwoCheckPage.vue'),
+        path: '/verify/auth/email/:token',
+        name: 'verifyAuthEmail',
+        component: () => import('src/pages/auth/VerifyAuthEmailPage.vue'),
         meta: {
           requiresAuth: false,
         },
@@ -56,22 +53,16 @@ const routes = [
         },
       },
       {
-        path: '/reset/password',
+        path: '/reset/password/:token',
         name: 'reset',
-        props: (route) => ({
-          token: route.query.token,
-        }),
         component: () => import('src/pages/auth/ResetPasswordPage.vue'),
         meta: {
           requiresAuth: false,
         },
       },
       {
-        path: '/confirm/account',
+        path: '/confirm/account/:token',
         name: 'confirm',
-        props: (route) => ({
-          token: route.query.token,
-        }),
         component: () => import('src/pages/auth/ConfirmAccountPage.vue'),
         meta: {
           requiresAuth: false,

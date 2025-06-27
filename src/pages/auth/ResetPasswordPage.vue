@@ -1,31 +1,28 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import useNotify from 'src/composables/UseNotify'
 import PasswordCriteria from 'src/components/PasswordCriteria.vue'
 import BaseInput from 'src/components/form/BaseInput.vue'
 import useValidate from 'src/composables/UseValidate'
 import useAuth from 'src/composables/UseAuth'
 
-const props = defineProps({
-  token: {
-    type: String,
-    required: true,
-  },
-})
-
 const { resetPassword } = useAuth()
 const { notifySuccess } = useNotify()
 const { passwordRule } = useValidate()
 const router = useRouter()
+const route = useRoute()
 const form = ref({
-  token: '',
   password: '',
   confirmPassword: '',
 })
 
 async function handleResetPassword() {
-  const response = await resetPassword('/api/v1/auth/reset/password', form.value)
+  const response = await resetPassword(
+    '/api/v1/auth/reset/password',
+    route.params.token,
+    form.value,
+  )
   if (response && response.status === 'OK') {
     // Clean form input
     onReset()
@@ -35,14 +32,10 @@ async function handleResetPassword() {
     router.push({ name: 'signin' })
   }
 }
-// Lisent props
-watchEffect(() => {
-  form.value.token = props.token // Token
-})
+
 //onReset
 function onReset() {
   form.value = {
-    token: '',
     password: '',
     confirmPassword: '',
   }

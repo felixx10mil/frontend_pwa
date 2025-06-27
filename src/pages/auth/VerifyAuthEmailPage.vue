@@ -1,20 +1,16 @@
 <script setup>
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import useNotify from 'src/composables/UseNotify'
 import useAuth from 'src/composables/UseAuth.js'
 
-const props = defineProps({
-  token: {
-    type: String,
-    required: true,
-  },
-})
 const router = useRouter()
+const route = useRoute()
+
 const { notifySuccess } = useNotify()
-const { signinTwoCheck } = useAuth()
+const { verifyAuthEmail } = useAuth()
 
 async function handleSigninTwo() {
-  const response = await signinTwoCheck('/api/v1/auth/signinTwoCheck', props.token)
+  const response = await verifyAuthEmail('/api/v1/auth/verify/authEmail', route.params.token)
   if (response && response.status === 'OK') {
     // Message
     notifySuccess(response.message)

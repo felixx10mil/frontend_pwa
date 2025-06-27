@@ -46,12 +46,12 @@ export default function useAuth() {
   }
 
   /**
-   * Signin Two
+   * Send auth email
    * @param {*} url
    * @param {*} email
    * @returns
    */
-  async function signinTwo(url, { email }) {
+  async function sendAuthEmail(url, { email }) {
     $q.loading.show({
       message: 'Loading...',
     })
@@ -72,12 +72,12 @@ export default function useAuth() {
   }
 
   /**
-   * Signin Two Check
+   * Verify auth email
    * @param {*} url
    * @param {*} token
    * @returns
    */
-  async function signinTwoCheck(url, token) {
+  async function verifyAuthEmail(url, token) {
     $q.loading.show({
       message: 'Loading...',
     })
@@ -176,7 +176,7 @@ export default function useAuth() {
    * @param {*} confirmPassword
    * @returns
    */
-  async function resetPassword(url, { token, password, confirmPassword }) {
+  async function resetPassword(url, token, { password, confirmPassword }) {
     $q.loading.show({
       message: 'Loading...',
     })
@@ -246,8 +246,8 @@ export default function useAuth() {
 
   return {
     signin,
-    signinTwo,
-    signinTwoCheck,
+    sendAuthEmail,
+    verifyAuthEmail,
     signup,
     forgotPassword,
     resetPassword,
