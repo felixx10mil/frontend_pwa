@@ -39,7 +39,7 @@ export default defineBoot(({ router, app, store }) => {
         Notify.create({
           position: 'top',
           type: 'negative',
-          message: `${error.response.data.error.message}`,
+          message: `${error.response.data.message}`,
           actions: [
             {
               label: status === 401 ? 'refresh' : 'close',
