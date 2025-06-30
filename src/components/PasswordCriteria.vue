@@ -24,7 +24,6 @@ watchEffect(() => {
 
 <template>
   <div>
-    <div class="text-subtitle2 q-mb-sm">Password:</div>
     <div>
       <q-icon
         :name="has_minimum_lenth ? 'verified' : 'clear'"

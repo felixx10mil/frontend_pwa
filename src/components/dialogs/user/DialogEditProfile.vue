@@ -1,6 +1,8 @@
 <script setup>
 import { useDialogPluginComponent } from 'quasar'
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, computed } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 import { api } from 'boot/axios'
 import BarDialog from '../BarDialog.vue'
 import useNotify from 'src/composables/UseNotify'
@@ -15,29 +17,44 @@ defineEmits([...useDialogPluginComponent.emits])
 const store = useAuthStore()
 const { notifySuccess } = useNotify()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+const isLoading = ref(false)
+const maximizedToggle = ref(true)
+
+// Data
 const form = ref({
   first_name: '',
   last_name: '',
   biography: '',
 })
-const isLoading = ref(false)
-const maximizedToggle = ref(true)
+
+// Rules
+const rules = computed(() => ({
+  first_name: { required },
+  last_name: { required },
+  biography: { required },
+}))
+
+const v$ = useVuelidate(rules, form)
 
 // Update profile
 async function handleUpdateProfile() {
   // Start loading
   isLoading.value = true
 
-  // Fetch axios
+  // Check form
+  const isFormValid = await v$.value.$validate()
+
   try {
-    const { data } = await api.patch(`/api/v1/users/profile/${store.getStateId}`, form.value)
-    if (data.status === 'OK') {
-      // Message
-      notifySuccess(data.message)
-      // Clean input
-      onInputClean()
-      // Close modal
-      onDialogOK()
+    if (isFormValid) {
+      const { data } = await api.patch(`/api/v1/users/profile/${store.getStateId}`, form.value)
+      if (data.status === 'OK') {
+        // Message
+        notifySuccess(data.message)
+        // Clean input
+        onInputClean()
+        // Close modal
+        onDialogOK()
+      }
     }
   } catch (error) {
     if (error) console.log('Oops!')
@@ -92,11 +109,9 @@ watchEffect(() => {
               v-model="form.first_name"
               label="First name"
               type="text"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The name field is required.',
-                (val) => val.length >= 6 || 'The name field must be 6 digits.',
-              ]"
+              :error="v$.first_name.$error"
+              :error-message="v$.first_name.$errors[0]?.$message"
+              @blur="v$.first_name.$touch()"
             />
 
             <BaseInput
@@ -104,11 +119,9 @@ watchEffect(() => {
               v-model="form.last_name"
               label="Last name"
               type="text"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The last_name field is required.',
-                (val) => val.length >= 6 || 'The name field must be 6 digits.',
-              ]"
+              :error="v$.last_name.$error"
+              :error-message="v$.last_name.$errors[0]?.$message"
+              @blur="v$.last_name.$touch()"
             />
 
             <BaseInput
@@ -116,11 +129,9 @@ watchEffect(() => {
               v-model="form.biography"
               label="Biography"
               type="textarea"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The biography field is required.',
-                (val) => val.length >= 6 || 'The name field must be 6 digits.',
-              ]"
+              :error="v$.biography.$error"
+              :error-message="v$.biography.$errors[0]?.$message"
+              @blur="v$.biography.$touch()"
             />
 
             <div class="text-center">

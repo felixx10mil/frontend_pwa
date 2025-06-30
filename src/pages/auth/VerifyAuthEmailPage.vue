@@ -25,7 +25,7 @@ handleSigninTwo()
   <q-page class="window-height window-width row justify-center items-center">
     <div class="column q-pa-lg">
       <div class="row">
-        <p class="col-12 text-h5 text-center">Checking of the information...</p>
+        <p class="col-12 text-h5 text-center">Credentials check...</p>
       </div>
     </div>
   </q-page>

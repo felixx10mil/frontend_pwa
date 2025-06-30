@@ -1,12 +1,14 @@
 <script setup>
 import { useDialogPluginComponent } from 'quasar'
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, computed } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
+
 import { api } from 'boot/axios'
 import { useAuthStore } from 'src/stores/auth-storage'
 import BarDialog from '../BarDialog.vue'
 import useNotify from 'src/composables/UseNotify'
 import BaseInput from 'src/components/form/BaseInput.vue'
-import useValidate from 'src/composables/UseValidate'
 
 const props = defineProps({
   data: { type: Object, required: true },
@@ -16,31 +18,45 @@ defineEmits([...useDialogPluginComponent.emits])
 
 const store = useAuthStore()
 const { notifySuccess } = useNotify()
-const { emailRule, passwordRule } = useValidate()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+const isLoading = ref(false)
+const maximizedToggle = ref(true)
+
+// Data
 const form = ref({
   currentPassword: '',
   name: '',
   email: '',
 })
-const isLoading = ref(false)
-const maximizedToggle = ref(true)
+
+// Rules
+const rules = computed(() => ({
+  name: { required },
+  email: { required, email },
+  currentPassword: { required },
+}))
+
+const v$ = useVuelidate(rules, form)
 
 // Update account
 async function handleUpdateAccount() {
   // Start loading
   isLoading.value = true
 
-  // Fetch axios
+  // Check form
+  const isFormValid = await v$.value.$validate()
+
   try {
-    const { data } = await api.patch(`/api/v1/users/account/${store.getStateId}`, form.value)
-    if (data.status === 'OK') {
-      // Message
-      notifySuccess(data.message)
-      // Clean input
-      onInputClean()
-      // Close modal
-      onDialogOK()
+    if (isFormValid) {
+      const { data } = await api.patch(`/api/v1/users/account/${store.getStateId}`, form.value)
+      if (data.status === 'OK') {
+        // Message
+        notifySuccess(data.message)
+        // Clean input
+        onInputClean()
+        // Close modal
+        onDialogOK()
+      }
     }
   } catch (error) {
     if (error) console.log('Oops!')
@@ -94,13 +110,9 @@ watchEffect(() => {
               v-model="form.currentPassword"
               label="Current password"
               type="password"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The current password field is required.',
-                (val) =>
-                  passwordRule(val) ||
-                  'The current password field must be between 7 and 12 digits.',
-              ]"
+              :error="v$.currentPassword.$error"
+              :error-message="v$.currentPassword.$errors[0]?.$message"
+              @blur="v$.currentPassword.$touch()"
             />
 
             <BaseInput
@@ -108,11 +120,9 @@ watchEffect(() => {
               v-model="form.name"
               label="Name"
               type="text"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The name field is required.',
-                (val) => val.length >= 6 || 'The name field must be 6 digits.',
-              ]"
+              :error="v$.name.$error"
+              :error-message="v$.name.$errors[0]?.$message"
+              @blur="v$.name.$touch()"
             />
 
             <BaseInput
@@ -120,11 +130,9 @@ watchEffect(() => {
               v-model="form.email"
               label="Email"
               type="email"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The email field is required.',
-                (val) => emailRule(val) || 'The email is invalid.',
-              ]"
+              :error="v$.email.$error"
+              :error-message="v$.email.$errors[0]?.$message"
+              @blur="v$.email.$touch()"
             />
 
             <div class="text-center">

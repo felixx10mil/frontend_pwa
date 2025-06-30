@@ -1,10 +1,11 @@
 <script setup>
 import { useDialogPluginComponent } from 'quasar'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
 import { api } from 'boot/axios'
 import useNotify from 'src/composables/UseNotify'
 import BaseInput from 'src/components/form/BaseInput.vue'
-import useValidate from 'src/composables/UseValidate'
 
 const props = defineProps({
   id: { type: Number, required: true },
@@ -13,33 +14,42 @@ const props = defineProps({
 defineEmits([...useDialogPluginComponent.emits])
 
 const { notifySuccess } = useNotify()
-const { emailRule } = useValidate()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
-const email = ref('')
 const isLoading = ref(false)
+
+// Data
+const form = ref({
+  email: '',
+})
+
+// Rules
+const rules = computed(() => ({
+  email: { required, email },
+}))
+
+const v$ = useVuelidate(rules, form)
 
 // Delete user
 async function handleDeleteUser() {
   // Start loading
   isLoading.value = true
 
-  // config
-  const config = {
-    data: {
-      email: email.value,
-    },
-  }
+  // Check form
+  const isFormValid = await v$.value.$validate()
 
-  // Fetch axios
   try {
-    const { data } = await api.delete(`/api/v1/admin/users/${props.id}`, config)
-    if (data.status === 'OK') {
-      // Message
-      notifySuccess(data.message)
-      // Clean input
-      email.value = ''
-      // Close modal
-      onDialogOK()
+    if (isFormValid) {
+      const { data } = await api.delete(`/api/v1/admin/users/${props.id}`, {
+        data: { email: form.value.email },
+      })
+      if (data.status === 'OK') {
+        // Message
+        notifySuccess(data.message)
+        // Clean input
+        email.value = ''
+        // Close modal
+        onDialogOK()
+      }
     }
   } catch (error) {
     if (error) console.log('Oops!')
@@ -68,14 +78,12 @@ async function handleDeleteUser() {
           <div class="col-12 q-gutter-y-md">
             <BaseInput
               icon="email"
-              v-model="email"
+              v-model="form.email"
               label="Confirm with email"
               type="email"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The email field is required.',
-                (val) => emailRule(val) || 'The email is invalid.',
-              ]"
+              :error="v$.email.$error"
+              :error-message="v$.email.$errors[0]?.$message"
+              @blur="v$.email.$touch()"
             />
 
             <div class="text-center">

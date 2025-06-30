@@ -1,43 +1,66 @@
 <script setup>
 import { useDialogPluginComponent } from 'quasar'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required, sameAs, helpers } from '@vuelidate/validators'
 import { api } from 'boot/axios'
 import { useAuthStore } from 'src/stores/auth-storage'
 import BarDialog from '../BarDialog.vue'
 import useNotify from 'src/composables/UseNotify'
 import PasswordCriteria from 'src/components/PasswordCriteria.vue'
 import BaseInput from 'src/components/form/BaseInput.vue'
-import useValidate from 'src/composables/UseValidate'
 
 defineEmits([...useDialogPluginComponent.emits])
 
 const store = useAuthStore()
 const { notifySuccess } = useNotify()
-const { passwordRule } = useValidate()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+const isLoading = ref(false)
+const maximizedToggle = ref(true)
+const passwd = helpers.regex(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{7,12}$/)
+
+// Data
 const form = ref({
   currentPassword: '',
   newPassword: '',
   confirmPassword: '',
 })
-const isLoading = ref(false)
-const maximizedToggle = ref(true)
+
+// Rules
+const rules = computed(() => ({
+  currentPassword: { required },
+  newPassword: {
+    required,
+    passwd: helpers.withMessage('Invalid password', passwd),
+  },
+  confirmPassword: {
+    required,
+    passwd: helpers.withMessage('Invalid password', passwd),
+    sameAs: sameAs(form.value.newPassword),
+  },
+}))
+
+const v$ = useVuelidate(rules, form)
 
 // Update Password
 async function handleUpdatePassword() {
   // Start loading
   isLoading.value = true
 
-  // Fetch axios
+  // Check form
+  const isFormValid = await v$.value.$validate()
+
   try {
-    const { data } = await api.patch(`/api/v1/users/password/${store.getStateId}`, form.value)
-    if (data.status === 'OK') {
-      // Message
-      notifySuccess(data.message)
-      // Clean input
-      onInputClean()
-      // Close modal
-      onDialogOK()
+    if (isFormValid) {
+      const { data } = await api.patch(`/api/v1/users/password/${store.getStateId}`, form.value)
+      if (data.status === 'OK') {
+        // Message
+        notifySuccess(data.message)
+        // Clean input
+        onInputClean()
+        // Close modal
+        onDialogOK()
+      }
     }
   } catch (error) {
     if (error) console.log('Oops!')
@@ -84,13 +107,9 @@ const onUpdateModalSize = (value) => {
               v-model="form.currentPassword"
               label="Current password"
               type="password"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The current password field is required.',
-                (val) =>
-                  passwordRule(val) ||
-                  'The current password field must be between 7 and 12 digits.',
-              ]"
+              :error="v$.currentPassword.$error"
+              :error-message="v$.currentPassword.$errors[0]?.$message"
+              @blur="v$.currentPassword.$touch()"
             />
 
             <BaseInput
@@ -98,12 +117,9 @@ const onUpdateModalSize = (value) => {
               v-model="form.newPassword"
               label="New password"
               type="password"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The new password field is required.',
-                (val) =>
-                  passwordRule(val) || 'The new password field must be between 7 and 12 digits.',
-              ]"
+              :error="v$.newPassword.$error"
+              :error-message="v$.newPassword.$errors[0]?.$message"
+              @blur="v$.newPassword.$touch()"
             />
 
             <PasswordCriteria :passwordValue="form.newPassword" />
@@ -113,15 +129,9 @@ const onUpdateModalSize = (value) => {
               v-model="form.confirmPassword"
               label="Confirm password"
               type="password"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The confirm password field is required.',
-                (val) =>
-                  (val && val === form.newPassword) || 'Password confirmation does not match.',
-                (val) =>
-                  passwordRule(val) ||
-                  'The confirm password field must be between 7 and 12 digits.',
-              ]"
+              :error="v$.confirmPassword.$error"
+              :error-message="v$.confirmPassword.$errors[0]?.$message"
+              @blur="v$.confirmPassword.$touch()"
             />
 
             <div class="text-center">

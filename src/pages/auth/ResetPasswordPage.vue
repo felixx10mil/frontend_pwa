@@ -1,35 +1,55 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required, sameAs, helpers } from '@vuelidate/validators'
 import { useRoute, useRouter } from 'vue-router'
-import useNotify from 'src/composables/UseNotify'
-import PasswordCriteria from 'src/components/PasswordCriteria.vue'
 import BaseInput from 'src/components/form/BaseInput.vue'
-import useValidate from 'src/composables/UseValidate'
+import PasswordCriteria from 'src/components/PasswordCriteria.vue'
+import useNotify from 'src/composables/UseNotify'
 import useAuth from 'src/composables/UseAuth'
 
 const { resetPassword } = useAuth()
 const { notifySuccess } = useNotify()
-const { passwordRule } = useValidate()
 const router = useRouter()
 const route = useRoute()
+const passwd = helpers.regex(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{7,12}$/)
+
+// Data
 const form = ref({
   password: '',
   confirmPassword: '',
 })
 
+// Rules
+const rules = computed(() => ({
+  password: {
+    required,
+    passwd: helpers.withMessage('Invalid password', passwd),
+  },
+  confirmPassword: {
+    required,
+    sameAs: sameAs(form.value.password),
+  },
+}))
+
+const v$ = useVuelidate(rules, form)
+
 async function handleResetPassword() {
-  const response = await resetPassword(
-    '/api/v1/auth/reset/password',
-    route.params.token,
-    form.value,
-  )
-  if (response && response.status === 'OK') {
-    // Clean form input
-    onReset()
-    // Message
-    notifySuccess(response.message)
-    // Redirect
-    router.push({ name: 'signin' })
+  const isFormValid = await v$.value.$validate()
+  if (isFormValid) {
+    const response = await resetPassword(
+      '/api/v1/auth/reset/password',
+      route.params.token,
+      form.value,
+    )
+    if (response && response.status === 'OK') {
+      // Clean form input
+      onReset()
+      // Message
+      notifySuccess(response.message)
+      // Redirect
+      router.push({ name: 'signin' })
+    }
   }
 }
 
@@ -60,11 +80,9 @@ function onReset() {
               v-model="form.password"
               label="Password"
               type="password"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The password field is required.',
-                (val) => passwordRule(val) || 'The password field must be between 7 and 12 digits.',
-              ]"
+              :error="v$.password.$error"
+              :error-message="v$.password.$errors[0]?.$message"
+              @blur="v$.password.$touch()"
             />
 
             <PasswordCriteria :passwordValue="form.password" />
@@ -74,12 +92,9 @@ function onReset() {
               v-model="form.confirmPassword"
               label="Confirm password"
               type="password"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The password field is required.',
-                (val) => (val && val === form.password) || 'Password confirmation does not match.',
-                (val) => passwordRule(val) || 'The password field must be between 7 and 12 digits.',
-              ]"
+              :error="v$.confirmPassword.$error"
+              :error-message="v$.confirmPassword.$errors[0]?.$message"
+              @blur="v$.confirmPassword.$touch()"
             />
           </q-card-section>
           <q-card-actions vertical align="center" class="q-ma-sm">

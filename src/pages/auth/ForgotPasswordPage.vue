@@ -1,27 +1,38 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
-import useNotify from 'src/composables/UseNotify'
 import BaseInput from 'src/components/form/BaseInput.vue'
-import useValidate from 'src/composables/UseValidate.js'
+import useNotify from 'src/composables/UseNotify'
 import useAuth from 'src/composables/UseAuth.js'
 const { forgotPassword } = useAuth()
 const { notifySuccess } = useNotify()
-const { emailRule } = useValidate()
 const router = useRouter()
+// Data
 const form = ref({
   email: '',
 })
 
+// Rules
+const rules = computed(() => ({
+  email: { required, email },
+}))
+
+const v$ = useVuelidate(rules, form)
+
 async function handleForgotPassword() {
-  const response = await forgotPassword('/api/v1/auth/forgot/password', form.value)
-  if (response && response.status === 'OK') {
-    // Reset form
-    onReset()
-    // Message
-    notifySuccess(response.message)
-    // Redirect
-    router.push({ name: 'signin' })
+  const isFormValid = await v$.value.$validate()
+  if (isFormValid) {
+    const response = await forgotPassword('/api/v1/auth/forgot/password', form.value)
+    if (response && response.status === 'OK') {
+      // Reset form
+      onReset()
+      // Message
+      notifySuccess(response.message)
+      // Redirect
+      router.push({ name: 'signin' })
+    }
   }
 }
 
@@ -51,11 +62,9 @@ function onReset() {
               v-model="form.email"
               label="Email"
               type="email"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The email field is required.',
-                (val) => emailRule(val) || 'The email is invalid.',
-              ]"
+              :error="v$.email.$error"
+              :error-message="v$.email.$errors[0]?.$message"
+              @blur="v$.email.$touch()"
             />
           </q-card-section>
           <q-card-actions vertical align="center" class="q-ma-sm">

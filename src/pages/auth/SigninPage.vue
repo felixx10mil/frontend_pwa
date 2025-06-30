@@ -1,29 +1,41 @@
 <script setup>
-import BaseInput from 'src/components/form/BaseInput.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
+import BaseInput from 'src/components/form/BaseInput.vue'
 import useNotify from 'src/composables/UseNotify.js'
-import useValidate from 'src/composables/UseValidate.js'
 import useAuth from 'src/composables/UseAuth'
 
 const { signin } = useAuth()
-const { emailRule, passwordRule } = useValidate()
 const { notifySuccess } = useNotify()
 const router = useRouter()
+// Data
 const form = ref({
   email: '',
   password: '',
 })
 
+// Rules
+const rules = computed(() => ({
+  email: { required, email },
+  password: { required },
+}))
+
+const v$ = useVuelidate(rules, form)
+
 async function handleSignin() {
-  const response = await signin('/api/v1/auth/signin', form.value)
-  if (response && response.status === 'OK') {
-    // Reset form
-    onReset()
-    // Message
-    notifySuccess(response.message)
-    // Redirect
-    router.push({ name: 'home' })
+  const isFormValid = await v$.value.$validate()
+  if (isFormValid) {
+    const response = await signin('/api/v1/auth/signin', form.value)
+    if (response && response.status === 'OK') {
+      // Reset form
+      onReset()
+      // Message
+      notifySuccess(response.message)
+      // Redirect
+      router.push({ name: 'home' })
+    }
   }
 }
 
@@ -54,22 +66,18 @@ function onReset() {
               v-model="form.email"
               label="Email"
               type="email"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The email field is required.',
-                (val) => emailRule(val) || 'The email is invalid.',
-              ]"
+              :error="v$.email.$error"
+              :error-message="v$.email.$errors[0]?.$message"
+              @blur="v$.email.$touch()"
             />
             <BaseInput
               icon="lock"
               v-model="form.password"
               label="Password"
               type="password"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The password field is required.',
-                (val) => passwordRule(val) || 'The password field must be between 7 and 12 digits.',
-              ]"
+              :error="v$.password.$error"
+              :error-message="v$.password.$errors[0]?.$message"
+              @blur="v$.password.$touch()"
             />
             <p class="text-right">
               <router-link class="text-accent" style="text-decoration: none" to="/forgot/password"

@@ -114,7 +114,7 @@ export default function useAuth() {
    * @param {*} confirmPassword
    * @returns
    */
-  async function signup(url, { fullName, email, password, confirmPassword }) {
+  async function signup(url, { firstName, lastName, email, password, confirmPassword }) {
     $q.loading.show({
       message: 'Loading...',
     })
@@ -125,7 +125,8 @@ export default function useAuth() {
         method: 'post',
         url: url,
         data: {
-          fullName,
+          firstName,
+          lastName,
           email,
           password,
           confirmPassword,

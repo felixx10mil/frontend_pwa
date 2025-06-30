@@ -30,7 +30,7 @@ export default function useValidate() {
    */
   const fullNameRule = (fullName) => {
     if (!/^([\w]{4,})+\s+([\w\s]{4,})+$/.test(fullName)) {
-      return 'FullName is invalid'
+      return 'The fullName field must contain a space.'
     }
     return true
   }

@@ -1,42 +1,64 @@
 <script setup>
 import { useDialogPluginComponent } from 'quasar'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email, sameAs, helpers } from '@vuelidate/validators'
 import { api } from 'boot/axios'
 import BarDialog from '../BarDialog.vue'
 import useNotify from 'src/composables/UseNotify'
 import PasswordCriteria from 'src/components/PasswordCriteria.vue'
 import BaseInput from 'src/components/form/BaseInput.vue'
-import useValidate from 'src/composables/UseValidate'
 
 defineEmits([...useDialogPluginComponent.emits])
 
 const { notifySuccess } = useNotify()
-const { fullNameRule, emailRule, passwordRule } = useValidate()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+const isLoading = ref(false)
+const maximizedToggle = ref(true)
+const passwd = helpers.regex(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{7,12}$/)
+
+// Data
 const form = ref({
-  fullName: '',
+  firstName: '',
+  lastName: '',
   email: '',
   password: '',
   confirmPassword: '',
 })
-const isLoading = ref(false)
-const maximizedToggle = ref(true)
+
+// Rules
+const rules = computed(() => ({
+  firstName: { required },
+  lastName: { required },
+  email: { required, email },
+  password: { required, passwd: helpers.withMessage('Invalid password', passwd) },
+  confirmPassword: {
+    required,
+    sameAs: sameAs(form.value.password),
+  },
+}))
+
+const v$ = useVuelidate(rules, form)
 
 // Register User
 async function handleCreateUser() {
   // Start loading
   isLoading.value = true
 
-  // Fetch axios
+  // Check form
+  const isFormValid = await v$.value.$validate()
+
   try {
-    const { data } = await api.post(`/api/v1/auth/signup`, form.value)
-    if (data.status === 'OK') {
-      // Message
-      notifySuccess(data.message)
-      // Clean input
-      onInputClean()
-      // Close modal
-      onDialogOK()
+    if (isFormValid) {
+      const { data } = await api.post(`/api/v1/auth/signup`, form.value)
+      if (data.status === 'OK') {
+        // Message
+        notifySuccess(data.message)
+        // Clean input
+        onInputClean()
+        // Close modal
+        onDialogOK()
+      }
     }
   } catch (error) {
     if (error) console.log('Oops!')
@@ -81,14 +103,22 @@ const onUpdateModalSize = (value) => {
           <div class="col-12 q-gutter-y-md">
             <BaseInput
               icon="person"
-              v-model="form.fullName"
-              label="First and last name"
+              v-model="form.firstName"
+              label="First name"
               type="text"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The fullname field is required.',
-                (val) => fullNameRule(val) || 'The fullName field must contain a space.',
-              ]"
+              :error="v$.firstName.$error"
+              :error-message="v$.firstName.$errors[0]?.$message"
+              @blur="v$.firstName.$touch()"
+            />
+
+            <BaseInput
+              icon="person"
+              v-model="form.lastName"
+              label="Last name"
+              type="text"
+              :error="v$.lastName.$error"
+              :error-message="v$.lastName.$errors[0]?.$message"
+              @blur="v$.lastName.$touch()"
             />
 
             <BaseInput
@@ -96,11 +126,9 @@ const onUpdateModalSize = (value) => {
               v-model="form.email"
               label="Email"
               type="email"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The email field is required.',
-                (val) => emailRule(val) || 'The email is invalid.',
-              ]"
+              :error="v$.email.$error"
+              :error-message="v$.email.$errors[0]?.$message"
+              @blur="v$.email.$touch()"
             />
 
             <BaseInput
@@ -108,11 +136,9 @@ const onUpdateModalSize = (value) => {
               v-model="form.password"
               label="Password"
               type="password"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The password field is required.',
-                (val) => passwordRule(val) || 'The password field must be between 7 and 12 digits.',
-              ]"
+              :error="v$.password.$error"
+              :error-message="v$.password.$errors[0]?.$message"
+              @blur="v$.password.$touch()"
             />
 
             <PasswordCriteria :passwordValue="form.password" />
@@ -122,12 +148,9 @@ const onUpdateModalSize = (value) => {
               v-model="form.confirmPassword"
               label="Confirm password"
               type="password"
-              lazy-rules
-              :rules="[
-                (val) => (val && val.length > 0) || 'The password field is required.',
-                (val) => (val && val === form.password) || 'Password confirmation does not match.',
-                (val) => passwordRule(val) || 'The password field must be between 7 and 12 digits.',
-              ]"
+              :error="v$.confirmPassword.$error"
+              :error-message="v$.confirmPassword.$errors[0]?.$message"
+              @blur="v$.confirmPassword.$touch()"
             />
 
             <div class="text-center">
