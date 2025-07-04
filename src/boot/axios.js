@@ -46,7 +46,7 @@ export default defineBoot(({ router, app, store }) => {
               color: 'yellow',
               handler: () => {
                 if (status === 401) {
-                  router.push({ name: 'signin' })
+                  router.push({ name: 'login' })
                   userStore.$reset()
                 }
               },

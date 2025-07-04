@@ -15,7 +15,7 @@ export default function useAuth() {
    * @param {*} password
    * @returns
    */
-  async function signin(url, { email, password }) {
+  async function login(url, { email, password }) {
     $q.loading.show({
       message: 'Loading...',
     })
@@ -202,7 +202,7 @@ export default function useAuth() {
   }
 
   /**
-   * Reset password
+   * Confirm email
    * @param {*} url
    * @param {*} token
    * @returns
@@ -240,13 +240,13 @@ export default function useAuth() {
       cancel: true,
       persistent: true,
     }).onOk(() => {
-      router.push({ name: 'signin' })
+      router.push({ name: 'login' })
       store.$reset()
     })
   }
 
   return {
-    signin,
+    login,
     sendAuthEmail,
     verifyAuthEmail,
     signup,

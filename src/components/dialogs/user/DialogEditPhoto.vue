@@ -2,9 +2,9 @@
 import { useDialogPluginComponent } from 'quasar'
 import { ref } from 'vue'
 import { api } from 'boot/axios'
-import BarDialog from '../BarDialog.vue'
-import useNotify from 'src/composables/UseNotify'
 import { useAuthStore } from 'src/stores/auth-storage'
+import useNotify from 'src/composables/UseNotify'
+import DialogHeaderBack from '../DialogHeaderBack.vue'
 
 defineEmits([...useDialogPluginComponent.emits])
 
@@ -15,7 +15,6 @@ const form = ref({
   file: null,
 })
 const isLoading = ref(false)
-const maximizedToggle = ref(true)
 
 function onRejected() {
   notifyError('The selected image exceeds 300KB')
@@ -44,7 +43,7 @@ async function handleUpdatePhoto() {
       // Message
       notifySuccess(data.message)
       // Clean input
-      onInputClean()
+      onReset()
       // Close modal
       onDialogOK()
     }
@@ -56,15 +55,10 @@ async function handleUpdatePhoto() {
   }
 }
 // Clear form
-function onInputClean() {
+function onReset() {
   form.value = {
     file: null,
   }
-}
-
-// Update modal size
-const onUpdateModalSize = (value) => {
-  maximizedToggle.value = value
 }
 </script>
 
@@ -73,16 +67,12 @@ const onUpdateModalSize = (value) => {
     ref="dialogRef"
     @hide="onDialogHide"
     persinstent
-    :maximized="maximizedToggle"
-    transition-show="slide-up"
+    :maximized="true"
+    transition-show="slide-left"
     transition-hide="slide-down"
   >
     <q-card class="q-dialog-plugin">
-      <bar-dialog
-        title="Photo"
-        :maximizedToggle="maximizedToggle"
-        @updateModalSize="onUpdateModalSize"
-      />
+      <DialogHeaderBack title="Photo" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
         <q-form class="row justify-center full-width" @submit.prevent="handleUpdatePhoto">
           <div class="col-12 q-gutter-y-md">

@@ -6,7 +6,7 @@ defineProps({
 <template>
   <q-item>
     <q-item-section avatar>
-      <q-skeleton size="56px" square />
+      <q-skeleton size="56px" circle />
     </q-item-section>
     <q-item-section>
       <q-skeleton type="text" square width="30%" />

@@ -48,3 +48,51 @@ export function useFetchUsers(url) {
 
   return { data: readonly(data), refresh: loadUsers }
 }
+
+/**
+ * Fetch roles
+ * @param {*} url
+ * @returns
+ */
+export function useFetchRoles(url) {
+  const roles = ref([])
+
+  async function loadRoles() {
+    try {
+      const { data } = await api.get(url)
+      if (data.status === 'OK') {
+        roles.value = data.roles.roles
+      }
+    } catch (err) {
+      if (err) console.log('Oops!')
+    }
+  }
+
+  loadRoles()
+
+  return { roles, refresh: loadRoles }
+}
+
+/**
+ * Fetch roles by user
+ * @param {*} url
+ * @returns
+ */
+export function useFetchRolesByUser(url) {
+  const rolesByUser = ref([])
+
+  async function loadRolesByUser() {
+    try {
+      const { data } = await api.get(url)
+      if (data.status === 'OK') {
+        rolesByUser.value = data.roles.roles
+      }
+    } catch (err) {
+      if (err) console.log('Oops!')
+    }
+  }
+
+  loadRolesByUser()
+
+  return { rolesByUser, refresh: loadRolesByUser }
+}

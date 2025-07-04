@@ -6,6 +6,7 @@ import { required, email } from '@vuelidate/validators'
 import { api } from 'boot/axios'
 import useNotify from 'src/composables/UseNotify'
 import BaseInput from 'src/components/form/BaseInput.vue'
+import DialogHeaderBack from '../DialogHeaderBack.vue'
 
 const props = defineProps({
   id: { type: Number, required: true },
@@ -15,6 +16,8 @@ defineEmits([...useDialogPluginComponent.emits])
 
 const { notifySuccess } = useNotify()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+
+// Loading initial value
 const isLoading = ref(false)
 
 // Data
@@ -46,7 +49,7 @@ async function handleDeleteUser() {
         // Message
         notifySuccess(data.message)
         // Clean input
-        email.value = ''
+        form.value.email = ''
         // Close modal
         onDialogOK()
       }
@@ -65,14 +68,12 @@ async function handleDeleteUser() {
     ref="dialogRef"
     @hide="onDialogHide"
     persinstent
-    :maximized="false"
-    transition-show="slide-up"
+    :maximized="true"
+    transition-show="slide-left"
     transition-hide="slide-down"
   >
     <q-card class="q-dialog-plugin">
-      <q-card-section>
-        <div class="text-h6">Delete</div>
-      </q-card-section>
+      <DialogHeaderBack title="Delete" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
         <q-form class="row justify-center full-width" @submit.prevent="handleDeleteUser">
           <div class="col-12 q-gutter-y-md">

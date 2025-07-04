@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required, email, sameAs, helpers } from '@vuelidate/validators'
+import { required, alpha, email, sameAs, helpers } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
 import useNotify from 'src/composables/UseNotify'
 import PasswordCriteria from 'src/components/PasswordCriteria.vue'
@@ -24,8 +24,8 @@ const form = ref({
 
 // Rules
 const rules = computed(() => ({
-  firstName: { required },
-  lastName: { required },
+  firstName: { required, alpha },
+  lastName: { required, alpha },
   email: { required, email },
   password: {
     required,
@@ -56,6 +56,8 @@ async function handleSignup() {
 //onReset
 function onReset() {
   form.value = {
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -132,11 +134,8 @@ function onReset() {
             >
             <p class="text-grey">
               Already have an account?
-              <router-link
-                class="text-accent"
-                :to="{ name: 'signin' }"
-                style="text-decoration: none"
-                >Sign in</router-link
+              <router-link class="text-accent" :to="{ name: 'login' }" style="text-decoration: none"
+                >Login</router-link
               >
             </p>
           </q-card-actions>

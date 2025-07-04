@@ -2,19 +2,18 @@
 import { useDialogPluginComponent } from 'quasar'
 import { computed, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required, email, sameAs, helpers } from '@vuelidate/validators'
+import { required, alpha, email, sameAs, helpers } from '@vuelidate/validators'
 import { api } from 'boot/axios'
-import BarDialog from '../BarDialog.vue'
 import useNotify from 'src/composables/UseNotify'
 import PasswordCriteria from 'src/components/PasswordCriteria.vue'
 import BaseInput from 'src/components/form/BaseInput.vue'
+import DialogHeaderBack from '../DialogHeaderBack.vue'
 
 defineEmits([...useDialogPluginComponent.emits])
 
 const { notifySuccess } = useNotify()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 const isLoading = ref(false)
-const maximizedToggle = ref(true)
 const passwd = helpers.regex(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{7,12}$/)
 
 // Data
@@ -28,14 +27,11 @@ const form = ref({
 
 // Rules
 const rules = computed(() => ({
-  firstName: { required },
-  lastName: { required },
+  firstName: { required, alpha },
+  lastName: { required, alpha },
   email: { required, email },
   password: { required, passwd: helpers.withMessage('Invalid password', passwd) },
-  confirmPassword: {
-    required,
-    sameAs: sameAs(form.value.password),
-  },
+  confirmPassword: { required, sameAs: sameAs(form.value.password) },
 }))
 
 const v$ = useVuelidate(rules, form)
@@ -55,7 +51,7 @@ async function handleCreateUser() {
         // Message
         notifySuccess(data.message)
         // Clean input
-        onInputClean()
+        onReset()
         // Close modal
         onDialogOK()
       }
@@ -69,17 +65,14 @@ async function handleCreateUser() {
 }
 
 // Clear form
-function onInputClean() {
+function onReset() {
   form.value = {
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
   }
-}
-
-// Update modal size
-const onUpdateModalSize = (value) => {
-  maximizedToggle.value = value
 }
 </script>
 
@@ -88,16 +81,12 @@ const onUpdateModalSize = (value) => {
     ref="dialogRef"
     @hide="onDialogHide"
     persinstent
-    :maximized="maximizedToggle"
-    transition-show="slide-up"
+    :maximized="true"
+    transition-show="slide-left"
     transition-hide="slide-down"
   >
     <q-card class="q-dialog-plugin">
-      <bar-dialog
-        title="Register user"
-        :maximizedToggle="maximizedToggle"
-        @updateModalSize="onUpdateModalSize"
-      />
+      <DialogHeaderBack title="Register" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
         <q-form class="row justify-center full-width" @submit.prevent="handleCreateUser">
           <div class="col-12 q-gutter-y-md">

@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { useFetchUser } from 'src/composables/fetch.js'
+import { useFetchRoles, useFetchUser, useFetchRolesByUser } from 'src/composables/fetch.js'
 import DialogUserDelete from 'src/components/dialogs/user/DialogUserDelete.vue'
 import DialogUserRole from 'src/components/dialogs/user/DialogUserRole.vue'
 import UserInfo from 'src/components/users/UserInfo.vue'
@@ -18,6 +18,10 @@ const userId = computed(() => parseInt(route.params.id))
 
 // Return data user
 const { data } = useFetchUser(`/api/v1/users/${userId.value}`)
+// Return options roles
+const { roles, refresh } = useFetchRoles('/api/v1/admin/roles')
+// Return roles by user
+const { rolesByUser } = useFetchRolesByUser(`/api/v1/admin/roles/by/user/${userId.value}`)
 
 // Update roles
 function updateRoles() {
@@ -25,9 +29,11 @@ function updateRoles() {
     component: DialogUserRole,
     componentProps: {
       id: userId.value,
+      roles: roles,
+      rolesByUser: rolesByUser,
     },
   })
-    .onOk(() => {})
+    .onOk(() => refresh())
     .onCancel(() => {})
 }
 // Delete account

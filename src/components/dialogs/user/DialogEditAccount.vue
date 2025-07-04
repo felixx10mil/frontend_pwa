@@ -2,13 +2,13 @@
 import { useDialogPluginComponent } from 'quasar'
 import { ref, watchEffect, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
+import { required, alpha, email } from '@vuelidate/validators'
 
 import { api } from 'boot/axios'
 import { useAuthStore } from 'src/stores/auth-storage'
-import BarDialog from '../BarDialog.vue'
 import useNotify from 'src/composables/UseNotify'
 import BaseInput from 'src/components/form/BaseInput.vue'
+import DialogHeaderBack from '../DialogHeaderBack.vue'
 
 const props = defineProps({
   data: { type: Object, required: true },
@@ -20,7 +20,6 @@ const store = useAuthStore()
 const { notifySuccess } = useNotify()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 const isLoading = ref(false)
-const maximizedToggle = ref(true)
 
 // Data
 const form = ref({
@@ -31,9 +30,9 @@ const form = ref({
 
 // Rules
 const rules = computed(() => ({
-  name: { required },
-  email: { required, email },
   currentPassword: { required },
+  name: { required, alpha },
+  email: { required, email },
 }))
 
 const v$ = useVuelidate(rules, form)
@@ -53,7 +52,7 @@ async function handleUpdateAccount() {
         // Message
         notifySuccess(data.message)
         // Clean input
-        onInputClean()
+        onReset()
         // Close modal
         onDialogOK()
       }
@@ -67,17 +66,12 @@ async function handleUpdateAccount() {
 }
 
 // Clear form
-function onInputClean() {
+function onReset() {
   form.value = {
     currentPassword: '',
     name: '',
     email: '',
   }
-}
-
-// Update modal size
-const onUpdateModalSize = (value) => {
-  maximizedToggle.value = value
 }
 
 // Watch props user object
@@ -92,16 +86,12 @@ watchEffect(() => {
     ref="dialogRef"
     @hide="onDialogHide"
     persinstent
-    :maximized="maximizedToggle"
-    transition-show="slide-up"
+    :maximized="true"
+    transition-show="slide-left"
     transition-hide="slide-down"
   >
     <q-card class="q-dialog-plugin">
-      <bar-dialog
-        title="Account"
-        :maximizedToggle="maximizedToggle"
-        @updateModalSize="onUpdateModalSize"
-      />
+      <DialogHeaderBack title="Account" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
         <q-form class="row justify-center full-width" @submit.prevent="handleUpdateAccount">
           <div class="col-12 q-gutter-y-md">

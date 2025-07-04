@@ -10,7 +10,7 @@ const url_base = computed(() => process.env.API_URL)
 <template>
   <q-item>
     <q-item-section top avatar>
-      <q-avatar rounded>
+      <q-avatar>
         <img crossorigin="anonymous" :src="`${url_base}/files/${user.profile?.avatar}`" />
       </q-avatar>
     </q-item-section>

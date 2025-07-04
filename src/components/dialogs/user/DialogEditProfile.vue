@@ -2,12 +2,12 @@
 import { useDialogPluginComponent } from 'quasar'
 import { ref, watchEffect, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { required, alpha } from '@vuelidate/validators'
 import { api } from 'boot/axios'
-import BarDialog from '../BarDialog.vue'
 import useNotify from 'src/composables/UseNotify'
 import { useAuthStore } from 'src/stores/auth-storage'
 import BaseInput from 'src/components/form/BaseInput.vue'
+import DialogHeaderBack from '../DialogHeaderBack.vue'
 
 const props = defineProps({
   data: { type: Object, required: true },
@@ -17,8 +17,9 @@ defineEmits([...useDialogPluginComponent.emits])
 const store = useAuthStore()
 const { notifySuccess } = useNotify()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+
+// Loading initial value
 const isLoading = ref(false)
-const maximizedToggle = ref(true)
 
 // Data
 const form = ref({
@@ -29,8 +30,8 @@ const form = ref({
 
 // Rules
 const rules = computed(() => ({
-  first_name: { required },
-  last_name: { required },
+  first_name: { required, alpha },
+  last_name: { required, alpha },
   biography: { required },
 }))
 
@@ -51,7 +52,7 @@ async function handleUpdateProfile() {
         // Message
         notifySuccess(data.message)
         // Clean input
-        onInputClean()
+        onReset()
         // Close modal
         onDialogOK()
       }
@@ -65,7 +66,7 @@ async function handleUpdateProfile() {
 }
 
 // Clear form
-function onInputClean() {
+function onReset() {
   form.value = {
     first_name: '',
     last_name: '',
@@ -73,10 +74,6 @@ function onInputClean() {
   }
 }
 
-// Update modal size
-const onUpdateModalSize = (value) => {
-  maximizedToggle.value = value
-}
 // Watch props user object
 watchEffect(() => {
   form.value.first_name = props.data.profile.first_name
@@ -90,17 +87,12 @@ watchEffect(() => {
     ref="dialogRef"
     @hide="onDialogHide"
     persinstent
-    :maximized="maximizedToggle"
-    transition-show="slide-up"
+    :maximized="true"
+    transition-show="slide-left"
     transition-hide="slide-down"
   >
     <q-card class="q-dialog-plugin">
-      <bar-dialog
-        title="Profile"
-        :maximizedToggle="maximizedToggle"
-        @updateModalSize="onUpdateModalSize"
-      />
-
+      <DialogHeaderBack title="Profile" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
         <q-form class="row justify-center full-width" @submit.prevent="handleUpdateProfile">
           <div class="col-12 q-gutter-y-md">

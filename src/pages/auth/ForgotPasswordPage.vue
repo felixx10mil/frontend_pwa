@@ -31,7 +31,7 @@ async function handleForgotPassword() {
       // Message
       notifySuccess(response.message)
       // Redirect
-      router.push({ name: 'signin' })
+      router.push({ name: 'login' })
     }
   }
 }
@@ -72,10 +72,7 @@ function onReset() {
               >Send Email</q-btn
             >
             <p class="text-grey">
-              <router-link
-                class="text-accent"
-                :to="{ name: 'signin' }"
-                style="text-decoration: none"
+              <router-link class="text-accent" :to="{ name: 'login' }" style="text-decoration: none"
                 >Back to login</router-link
               >
             </p>

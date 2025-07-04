@@ -1,41 +1,33 @@
 <script setup>
-import { useDialogPluginComponent, useQuasar } from 'quasar'
+import { useDialogPluginComponent } from 'quasar'
 import { ref } from 'vue'
 import { api } from 'boot/axios'
 import useNotify from 'src/composables/UseNotify'
+import DialogHeaderBack from '../DialogHeaderBack.vue'
 
 const props = defineProps({
   id: { type: Number, required: true },
+  roles: { type: Object, required: true },
+  rolesByUser: { type: Object, required: true },
 })
 
 defineEmits([...useDialogPluginComponent.emits])
 
 const { notifySuccess } = useNotify()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
-const optionsRoles = ref([])
-const form = ref({
-  roles: [],
-})
-const isLoading = ref(false)
-const $q = useQuasar()
 
-// Load roles
-async function handleLoadRoles() {
-  $q.loading.show({
-    message: 'Loading...',
-  })
-  try {
-    const { data } = await api.get(`/api/v1/admin/users/roles/${props.id}`)
-    if (data.status === 'OK') {
-      optionsRoles.value = data.roles.roleAll
-      form.value.roles = data.roles.roleByUser
-    }
-  } catch (error) {
-    if (error) console.log('Oops!')
-  } finally {
-    $q.loading.hide()
-  }
-}
+// Option roles
+const options = ref({
+  roles: props.roles,
+})
+
+// Roles by user
+const form = ref({
+  roles: props.rolesByUser,
+})
+
+// Loading initial value
+const isLoading = ref(false)
 
 // Update Roles
 async function handleUpdateRole() {
@@ -44,10 +36,8 @@ async function handleUpdateRole() {
 
   // Fetch axios
   try {
-    const { data } = await api.put(`/api/v1/admin/users/roles/${props.id}`, form.value)
+    const { data } = await api.put(`/api/v1/admin/roles/user/${props.id}`, form.value)
     if (data.status === 'OK') {
-      // Reload roles
-      handleLoadRoles()
       // Notify
       notifySuccess(data.message)
       // Close dialog
@@ -60,8 +50,6 @@ async function handleUpdateRole() {
     isLoading.value = false
   }
 }
-
-handleLoadRoles()
 </script>
 
 <template>
@@ -69,23 +57,22 @@ handleLoadRoles()
     ref="dialogRef"
     @hide="onDialogHide"
     persinstent
-    :maximized="false"
-    transition-show="slide-up"
+    :maximized="true"
+    transition-show="slide-left"
     transition-hide="slide-down"
   >
-    <q-card class="q-dialog-plugin" v-if="optionsRoles.length >= 1">
-      <q-card-section>
-        <div class="text-h6">Roles</div>
-      </q-card-section>
+    <q-card class="q-dialog-plugin">
+      <DialogHeaderBack title="Roles" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
         <q-form class="row justify-center full-width" @submit.prevent="handleUpdateRole">
           <div class="col-12 q-gutter-y-md">
             <q-option-group
               v-model="form.roles"
-              :options="optionsRoles"
+              :options="options.roles"
               color="primary"
               type="checkbox"
             />
+
             <div class="text-center">
               <q-btn
                 label="Update"

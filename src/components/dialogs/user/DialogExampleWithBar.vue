@@ -2,47 +2,43 @@
 import { useDialogPluginComponent } from 'quasar'
 import { computed, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required, sameAs, helpers } from '@vuelidate/validators'
+import { required, alpha, email, sameAs, helpers } from '@vuelidate/validators'
 import { api } from 'boot/axios'
-import { useAuthStore } from 'src/stores/auth-storage'
+import BarDialog from '../BarDialog.vue'
 import useNotify from 'src/composables/UseNotify'
 import PasswordCriteria from 'src/components/PasswordCriteria.vue'
 import BaseInput from 'src/components/form/BaseInput.vue'
-import DialogHeaderBack from '../DialogHeaderBack.vue'
 
 defineEmits([...useDialogPluginComponent.emits])
 
-const store = useAuthStore()
 const { notifySuccess } = useNotify()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 const isLoading = ref(false)
+const maximizedToggle = ref(true)
 const passwd = helpers.regex(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{7,12}$/)
 
 // Data
 const form = ref({
-  currentPassword: '',
-  newPassword: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
   confirmPassword: '',
 })
 
 // Rules
 const rules = computed(() => ({
-  currentPassword: { required },
-  newPassword: {
-    required,
-    passwd: helpers.withMessage('Invalid password', passwd),
-  },
-  confirmPassword: {
-    required,
-    passwd: helpers.withMessage('Invalid password', passwd),
-    sameAs: sameAs(form.value.newPassword),
-  },
+  firstName: { required, alpha },
+  lastName: { required, alpha },
+  email: { required, email },
+  password: { required, passwd: helpers.withMessage('Invalid password', passwd) },
+  confirmPassword: { required, sameAs: sameAs(form.value.password) },
 }))
 
 const v$ = useVuelidate(rules, form)
 
-// Update Password
-async function handleUpdatePassword() {
+// Register User
+async function handleCreateUser() {
   // Start loading
   isLoading.value = true
 
@@ -51,7 +47,7 @@ async function handleUpdatePassword() {
 
   try {
     if (isFormValid) {
-      const { data } = await api.patch(`/api/v1/users/password/${store.getStateId}`, form.value)
+      const { data } = await api.post(`/api/v1/auth/signup`, form.value)
       if (data.status === 'OK') {
         // Message
         notifySuccess(data.message)
@@ -68,13 +64,21 @@ async function handleUpdatePassword() {
     isLoading.value = false
   }
 }
+
 // Clear form
 function onReset() {
   form.value = {
-    currentPassword: '',
-    newPassword: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
     confirmPassword: '',
   }
+}
+
+// Update modal size
+const onUpdateModalSize = (value) => {
+  maximizedToggle.value = value
 }
 </script>
 
@@ -83,36 +87,60 @@ function onReset() {
     ref="dialogRef"
     @hide="onDialogHide"
     persinstent
-    :maximized="true"
-    transition-show="slide-left"
+    :maximized="maximizedToggle"
+    transition-show="slide-up"
     transition-hide="slide-down"
   >
     <q-card class="q-dialog-plugin">
-      <DialogHeaderBack title="Password" @customDialogCancel="onDialogCancel()" />
+      <bar-dialog
+        title="Register user"
+        :maximizedToggle="maximizedToggle"
+        @updateModalSize="onUpdateModalSize"
+      />
       <q-card-section>
-        <q-form class="row justify-center full-width" @submit.prevent="handleUpdatePassword">
+        <q-form class="row justify-center full-width" @submit.prevent="handleCreateUser">
           <div class="col-12 q-gutter-y-md">
             <BaseInput
-              icon="lock"
-              v-model="form.currentPassword"
-              label="Current password"
-              type="password"
-              :error="v$.currentPassword.$error"
-              :error-message="v$.currentPassword.$errors[0]?.$message"
-              @blur="v$.currentPassword.$touch()"
+              icon="person"
+              v-model="form.firstName"
+              label="First name"
+              type="text"
+              :error="v$.firstName.$error"
+              :error-message="v$.firstName.$errors[0]?.$message"
+              @blur="v$.firstName.$touch()"
+            />
+
+            <BaseInput
+              icon="person"
+              v-model="form.lastName"
+              label="Last name"
+              type="text"
+              :error="v$.lastName.$error"
+              :error-message="v$.lastName.$errors[0]?.$message"
+              @blur="v$.lastName.$touch()"
+            />
+
+            <BaseInput
+              icon="alternate_email"
+              v-model="form.email"
+              label="Email"
+              type="email"
+              :error="v$.email.$error"
+              :error-message="v$.email.$errors[0]?.$message"
+              @blur="v$.email.$touch()"
             />
 
             <BaseInput
               icon="lock"
-              v-model="form.newPassword"
-              label="New password"
+              v-model="form.password"
+              label="Password"
               type="password"
-              :error="v$.newPassword.$error"
-              :error-message="v$.newPassword.$errors[0]?.$message"
-              @blur="v$.newPassword.$touch()"
+              :error="v$.password.$error"
+              :error-message="v$.password.$errors[0]?.$message"
+              @blur="v$.password.$touch()"
             />
 
-            <PasswordCriteria :passwordValue="form.newPassword" />
+            <PasswordCriteria :passwordValue="form.password" />
 
             <BaseInput
               icon="lock"
@@ -126,7 +154,7 @@ function onReset() {
 
             <div class="text-center">
               <q-btn
-                label="Update"
+                label="Register"
                 type="submit"
                 rounded
                 :loading="isLoading"

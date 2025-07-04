@@ -13,17 +13,17 @@ const routes = [
         },
       },
       {
-        path: '/signin',
-        name: 'signin',
-        component: () => import('src/pages/auth/SigninPage.vue'),
+        path: '/login',
+        name: 'login',
+        component: () => import('src/pages/auth/LoginPage.vue'),
         meta: {
           requiresAuth: false,
         },
       },
       {
-        path: '/signin/by/email',
-        name: 'signinByEmail',
-        component: () => import('src/pages/auth/SigninByEmailPage.vue'),
+        path: '/login/by/email',
+        name: 'loginByEmail',
+        component: () => import('src/pages/auth/LoginByEmailPage.vue'),
         meta: {
           requiresAuth: false,
         },
@@ -118,7 +118,7 @@ const routes = [
       {
         path: 'profile',
         name: 'profile',
-        component: () => import('src/pages/users/UserPageProfile.vue'),
+        component: () => import('src/pages/users/UseProfilePage.vue'),
         meta: {
           title: 'Profile',
           requiresAuth: true,

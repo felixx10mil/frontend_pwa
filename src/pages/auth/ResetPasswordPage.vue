@@ -48,7 +48,7 @@ async function handleResetPassword() {
       // Message
       notifySuccess(response.message)
       // Redirect
-      router.push({ name: 'signin' })
+      router.push({ name: 'login' })
     }
   }
 }

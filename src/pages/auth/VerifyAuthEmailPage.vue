@@ -3,13 +3,12 @@ import { useRoute, useRouter } from 'vue-router'
 import useNotify from 'src/composables/UseNotify'
 import useAuth from 'src/composables/UseAuth.js'
 
+const { notifySuccess } = useNotify()
+const { verifyAuthEmail } = useAuth()
 const router = useRouter()
 const route = useRoute()
 
-const { notifySuccess } = useNotify()
-const { verifyAuthEmail } = useAuth()
-
-async function handleSigninTwo() {
+async function handleVerifyAuthEmail() {
   const response = await verifyAuthEmail('/api/v1/auth/verify/authEmail', route.params.token)
   if (response && response.status === 'OK') {
     // Message
@@ -19,7 +18,7 @@ async function handleSigninTwo() {
   }
 }
 
-handleSigninTwo()
+handleVerifyAuthEmail()
 </script>
 <template>
   <q-page class="window-height window-width row justify-center items-center">

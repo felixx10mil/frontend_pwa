@@ -43,8 +43,8 @@ const lorem =
         </div>
 
         <q-card-actions vertical align="center">
-          <q-btn rounded color="primary" class="full-width q-mb-sm" to="/signin" no-caps
-            >Sign in</q-btn
+          <q-btn rounded color="primary" class="full-width q-mb-sm" to="/login" no-caps
+            >Log in</q-btn
           >
           <q-btn outline rounded color="accent" class="full-width" to="/signup" no-caps
             >Sign up</q-btn
