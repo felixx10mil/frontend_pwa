@@ -90,62 +90,46 @@ function onReset() {
     <q-card class="q-dialog-plugin">
       <DialogHeaderBack title="Password" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
-        <q-form class="row justify-center full-width" @submit.prevent="handleUpdatePassword">
-          <div class="col-12 q-gutter-y-md">
-            <BaseInput
-              icon="lock"
-              v-model="form.currentPassword"
-              label="Current password"
-              type="password"
-              :error="v$.currentPassword.$error"
-              :error-message="v$.currentPassword.$errors[0]?.$message"
-              @blur="v$.currentPassword.$touch()"
-            />
+        <q-form @submit.prevent="handleUpdatePassword" class="q-pa-md q-gutter-md">
+          <BaseInput
+            icon="lock"
+            v-model="form.currentPassword"
+            label="Current password"
+            type="password"
+            :error="v$.currentPassword.$error"
+            :error-message="v$.currentPassword.$errors[0]?.$message"
+            @blur="v$.currentPassword.$touch()"
+          />
 
-            <BaseInput
-              icon="lock"
-              v-model="form.newPassword"
-              label="New password"
-              type="password"
-              :error="v$.newPassword.$error"
-              :error-message="v$.newPassword.$errors[0]?.$message"
-              @blur="v$.newPassword.$touch()"
-            />
+          <BaseInput
+            icon="lock"
+            v-model="form.newPassword"
+            label="New password"
+            type="password"
+            :error="v$.newPassword.$error"
+            :error-message="v$.newPassword.$errors[0]?.$message"
+            @blur="v$.newPassword.$touch()"
+          />
 
-            <PasswordCriteria :passwordValue="form.newPassword" />
+          <PasswordCriteria :passwordValue="form.newPassword" />
 
-            <BaseInput
-              icon="lock"
-              v-model="form.confirmPassword"
-              label="Confirm password"
-              type="password"
-              :error="v$.confirmPassword.$error"
-              :error-message="v$.confirmPassword.$errors[0]?.$message"
-              @blur="v$.confirmPassword.$touch()"
-            />
+          <BaseInput
+            icon="lock"
+            v-model="form.confirmPassword"
+            label="Confirm password"
+            type="password"
+            :error="v$.confirmPassword.$error"
+            :error-message="v$.confirmPassword.$errors[0]?.$message"
+            @blur="v$.confirmPassword.$touch()"
+          />
 
-            <div class="text-center">
-              <q-btn
-                label="Update"
-                type="submit"
-                rounded
-                :loading="isLoading"
-                color="primary"
-                class="full-width q-mb-lg"
-              >
-                <template v-slot:loading>
-                  <q-spinner-facebook />
-                </template>
-              </q-btn>
-              <q-btn
-                label="Cancel"
-                outline
-                rounded
-                color="grey-9"
-                class="full-width q-mb-lg"
-                @click="onDialogCancel"
-              />
-            </div>
+          <div class="row justify-center fixed-bottom q-pb-lg q-gutter-sm">
+            <q-btn label="Save" type="submit" rounded :loading="isLoading" color="primary">
+              <template v-slot:loading>
+                <q-spinner-facebook />
+              </template>
+            </q-btn>
+            <q-btn label="Cancel" outline rounded color="grey-9" @click="onDialogCancel" />
           </div>
         </q-form>
       </q-card-section>

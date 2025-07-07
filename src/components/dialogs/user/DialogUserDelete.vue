@@ -75,40 +75,24 @@ async function handleDeleteUser() {
     <q-card class="q-dialog-plugin">
       <DialogHeaderBack title="Delete" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
-        <q-form class="row justify-center full-width" @submit.prevent="handleDeleteUser">
-          <div class="col-12 q-gutter-y-md">
-            <BaseInput
-              icon="email"
-              v-model="form.email"
-              label="Confirm with email"
-              type="email"
-              :error="v$.email.$error"
-              :error-message="v$.email.$errors[0]?.$message"
-              @blur="v$.email.$touch()"
-            />
+        <q-form @submit.prevent="handleDeleteUser" class="q-pa-md q-gutter-md">
+          <BaseInput
+            icon="email"
+            v-model="form.email"
+            label="Confirm with email"
+            type="email"
+            :error="v$.email.$error"
+            :error-message="v$.email.$errors[0]?.$message"
+            @blur="v$.email.$touch()"
+          />
 
-            <div class="text-center">
-              <q-btn
-                label="Delete"
-                type="submit"
-                rounded
-                :loading="isLoading"
-                color="red"
-                class="full-width q-mb-lg"
-              >
-                <template v-slot:loading>
-                  <q-spinner-facebook />
-                </template>
-              </q-btn>
-              <q-btn
-                label="Cancel"
-                outline
-                rounded
-                color="grey-9"
-                class="full-width q-mb-lg"
-                @click="onDialogCancel"
-              />
-            </div>
+          <div class="row justify-center fixed-bottom q-pb-lg q-gutter-sm">
+            <q-btn label="Delete" type="submit" rounded :loading="isLoading" color="red">
+              <template v-slot:loading>
+                <q-spinner-facebook />
+              </template>
+            </q-btn>
+            <q-btn label="Cancel" outline rounded color="grey-9" @click="onDialogCancel" />
           </div>
         </q-form>
       </q-card-section>

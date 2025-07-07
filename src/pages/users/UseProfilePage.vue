@@ -1,7 +1,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/auth-storage'
-import { useFetchUser } from 'src/composables/fetch.js'
+import { useFetchUser } from 'src/composables/fetchUser'
 import useAuth from 'src/composables/UseAuth'
 import DialogEditPassword from 'src/components/dialogs/user/DialogEditPassword.vue'
 import DialogEditAccount from 'src/components/dialogs/user/DialogEditAccount.vue'
@@ -13,7 +13,7 @@ import SettingSkeleton from 'src/components/skeletons/SettingSkeleton.vue'
 
 const $q = useQuasar()
 const store = useAuthStore()
-const { data, refresh } = useFetchUser(`/api/v1/users/${store.getStateId}`)
+const { user, refreshUser } = useFetchUser(`/api/v1/users/${store.getStateId}`)
 const { logout } = useAuth()
 
 function updatePassword() {
@@ -28,10 +28,10 @@ function updateProfile() {
   $q.dialog({
     component: DialogEditProfile,
     componentProps: {
-      data: data.value,
+      data: user.value,
     },
   })
-    .onOk(() => refresh())
+    .onOk(() => refreshUser())
     .onCancel(() => {})
 }
 
@@ -39,7 +39,7 @@ function updatePhoto() {
   $q.dialog({
     component: DialogEditPhoto,
   })
-    .onOk(() => refresh())
+    .onOk(() => refreshUser())
     .onCancel(() => {})
 }
 
@@ -47,10 +47,10 @@ function updateAccount() {
   $q.dialog({
     component: DialogEditAccount,
     componentProps: {
-      data: data.value,
+      data: user.value,
     },
   })
-    .onOk(() => refresh())
+    .onOk(() => refreshUser())
     .onCancel(() => {})
 }
 
@@ -61,8 +61,8 @@ function handleLogout() {
 
 <template>
   <q-page padding>
-    <q-list v-if="data">
-      <UserInfo :user="data" />
+    <q-list v-if="user">
+      <UserInfo :user="user" />
       <q-separator />
       <q-item v-ripple>
         <q-item-section avatar top>

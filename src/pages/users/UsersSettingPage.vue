@@ -2,7 +2,9 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { useFetchRoles, useFetchUser, useFetchRolesByUser } from 'src/composables/fetch.js'
+import { useFetchUser } from 'src/composables/fetchUser'
+import { useFetchRoles } from 'src/composables/fetchRoles'
+import { useFetchRolesByUser } from 'src/composables/fetchRolesByUser'
 import DialogUserDelete from 'src/components/dialogs/user/DialogUserDelete.vue'
 import DialogUserRole from 'src/components/dialogs/user/DialogUserRole.vue'
 import UserInfo from 'src/components/users/UserInfo.vue'
@@ -17,11 +19,11 @@ const route = useRoute()
 const userId = computed(() => parseInt(route.params.id))
 
 // Return data user
-const { data } = useFetchUser(`/api/v1/users/${userId.value}`)
-// Return options roles
-const { roles, refresh } = useFetchRoles('/api/v1/admin/roles')
+const { user } = useFetchUser(() => `/api/v1/users/${userId.value}`)
+// Return roles
+const { roles, refreshRoles } = useFetchRoles('/api/v1/admin/roles')
 // Return roles by user
-const { rolesByUser } = useFetchRolesByUser(`/api/v1/admin/roles/by/user/${userId.value}`)
+const { rolesByUser } = useFetchRolesByUser(() => `/api/v1/admin/roles/by/user/${userId.value}`)
 
 // Update roles
 function updateRoles() {
@@ -33,7 +35,9 @@ function updateRoles() {
       rolesByUser: rolesByUser,
     },
   })
-    .onOk(() => refresh())
+    .onOk(() => {
+      refreshRoles()
+    })
     .onCancel(() => {})
 }
 // Delete account
@@ -53,8 +57,8 @@ function userDelete() {
 
 <template>
   <q-page padding>
-    <q-list v-if="data">
-      <UserInfo :user="data" />
+    <q-list v-if="user">
+      <UserInfo :user="user" />
       <q-separator />
       <q-item v-ripple>
         <q-item-section avatar top>
@@ -68,7 +72,7 @@ function userDelete() {
         </q-item-section>
         <q-item-section side top>
           <!-- Recibe props id,statusUser -->
-          <HandleStatusUser :id="userId" :statusUser="data.status" />
+          <HandleStatusUser :id="userId" :statusUser="user.status" />
         </q-item-section>
       </q-item>
       <q-item clickable v-ripple @click="updateRoles">

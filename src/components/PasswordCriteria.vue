@@ -26,24 +26,10 @@ watchEffect(() => {
   <div>
     <div>
       <q-icon
-        :name="has_minimum_lenth ? 'verified' : 'clear'"
-        :color="has_minimum_lenth ? 'positive' : 'negative'"
-      ></q-icon>
-      Must be between 7 and 12 digits.
-    </div>
-    <div>
-      <q-icon
         :name="has_number ? 'verified' : 'clear'"
         :color="has_number ? 'positive' : 'negative'"
       ></q-icon>
       Must contain a digit from 1 to 9.
-    </div>
-    <div>
-      <q-icon
-        :name="has_lowercase ? 'verified' : 'clear'"
-        :color="has_lowercase ? 'positive' : 'negative'"
-      ></q-icon>
-      Must contain lowercase letters.
     </div>
     <div>
       <q-icon
@@ -54,10 +40,24 @@ watchEffect(() => {
     </div>
     <div>
       <q-icon
+        :name="has_lowercase ? 'verified' : 'clear'"
+        :color="has_lowercase ? 'positive' : 'negative'"
+      ></q-icon>
+      Must contain lowercase letters.
+    </div>
+    <div>
+      <q-icon
         :name="has_special ? 'verified' : 'clear'"
         :color="has_special ? 'positive' : 'negative'"
       ></q-icon>
       Must contain a special character.
+    </div>
+    <div>
+      <q-icon
+        :name="has_minimum_lenth ? 'verified' : 'clear'"
+        :color="has_minimum_lenth ? 'positive' : 'negative'"
+      ></q-icon>
+      Must be between 7 and 12 digits.
     </div>
   </div>
 </template>

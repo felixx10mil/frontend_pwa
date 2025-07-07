@@ -88,82 +88,66 @@ function onReset() {
     <q-card class="q-dialog-plugin">
       <DialogHeaderBack title="Register" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
-        <q-form class="row justify-center full-width" @submit.prevent="handleCreateUser">
-          <div class="col-12 q-gutter-y-md">
-            <BaseInput
-              icon="person"
-              v-model="form.firstName"
-              label="First name"
-              type="text"
-              :error="v$.firstName.$error"
-              :error-message="v$.firstName.$errors[0]?.$message"
-              @blur="v$.firstName.$touch()"
-            />
+        <q-form @submit.prevent="handleCreateUser" class="q-pa-md q-gutter-md">
+          <BaseInput
+            icon="person"
+            v-model="form.firstName"
+            label="First name"
+            type="text"
+            :error="v$.firstName.$error"
+            :error-message="v$.firstName.$errors[0]?.$message"
+            @blur="v$.firstName.$touch()"
+          />
 
-            <BaseInput
-              icon="person"
-              v-model="form.lastName"
-              label="Last name"
-              type="text"
-              :error="v$.lastName.$error"
-              :error-message="v$.lastName.$errors[0]?.$message"
-              @blur="v$.lastName.$touch()"
-            />
+          <BaseInput
+            icon="person"
+            v-model="form.lastName"
+            label="Last name"
+            type="text"
+            :error="v$.lastName.$error"
+            :error-message="v$.lastName.$errors[0]?.$message"
+            @blur="v$.lastName.$touch()"
+          />
 
-            <BaseInput
-              icon="alternate_email"
-              v-model="form.email"
-              label="Email"
-              type="email"
-              :error="v$.email.$error"
-              :error-message="v$.email.$errors[0]?.$message"
-              @blur="v$.email.$touch()"
-            />
+          <BaseInput
+            icon="alternate_email"
+            v-model="form.email"
+            label="Email"
+            type="email"
+            :error="v$.email.$error"
+            :error-message="v$.email.$errors[0]?.$message"
+            @blur="v$.email.$touch()"
+          />
 
-            <BaseInput
-              icon="lock"
-              v-model="form.password"
-              label="Password"
-              type="password"
-              :error="v$.password.$error"
-              :error-message="v$.password.$errors[0]?.$message"
-              @blur="v$.password.$touch()"
-            />
+          <BaseInput
+            icon="lock"
+            v-model="form.password"
+            label="Password"
+            type="password"
+            :error="v$.password.$error"
+            :error-message="v$.password.$errors[0]?.$message"
+            @blur="v$.password.$touch()"
+          />
 
-            <PasswordCriteria :passwordValue="form.password" />
+          <PasswordCriteria :passwordValue="form.password" />
 
-            <BaseInput
-              icon="lock"
-              v-model="form.confirmPassword"
-              label="Confirm password"
-              type="password"
-              :error="v$.confirmPassword.$error"
-              :error-message="v$.confirmPassword.$errors[0]?.$message"
-              @blur="v$.confirmPassword.$touch()"
-            />
+          <BaseInput
+            icon="lock"
+            v-model="form.confirmPassword"
+            label="Confirm password"
+            type="password"
+            :error="v$.confirmPassword.$error"
+            :error-message="v$.confirmPassword.$errors[0]?.$message"
+            @blur="v$.confirmPassword.$touch()"
+          />
 
-            <div class="text-center">
-              <q-btn
-                label="Register"
-                type="submit"
-                rounded
-                :loading="isLoading"
-                color="primary"
-                class="full-width q-mb-lg"
-              >
-                <template v-slot:loading>
-                  <q-spinner-facebook />
-                </template>
-              </q-btn>
-              <q-btn
-                label="Cancel"
-                outline
-                rounded
-                color="grey-9"
-                class="full-width q-mb-lg"
-                @click="onDialogCancel"
-              />
-            </div>
+          <div class="row justify-center fixed-bottom q-pb-lg q-gutter-sm">
+            <q-btn label="Save" type="submit" rounded :loading="isLoading" color="primary">
+              <template v-slot:loading>
+                <q-spinner-facebook />
+              </template>
+            </q-btn>
+            <q-btn label="Cancel" outline rounded color="grey-9" @click="onDialogCancel" />
           </div>
         </q-form>
       </q-card-section>

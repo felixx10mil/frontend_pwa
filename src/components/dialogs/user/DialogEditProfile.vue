@@ -94,60 +94,44 @@ watchEffect(() => {
     <q-card class="q-dialog-plugin">
       <DialogHeaderBack title="Profile" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
-        <q-form class="row justify-center full-width" @submit.prevent="handleUpdateProfile">
-          <div class="col-12 q-gutter-y-md">
-            <BaseInput
-              icon="person"
-              v-model="form.first_name"
-              label="First name"
-              type="text"
-              :error="v$.first_name.$error"
-              :error-message="v$.first_name.$errors[0]?.$message"
-              @blur="v$.first_name.$touch()"
-            />
+        <q-form @submit.prevent="handleUpdateProfile" class="q-pa-md q-gutter-md">
+          <BaseInput
+            icon="person"
+            v-model="form.first_name"
+            label="First name"
+            type="text"
+            :error="v$.first_name.$error"
+            :error-message="v$.first_name.$errors[0]?.$message"
+            @blur="v$.first_name.$touch()"
+          />
 
-            <BaseInput
-              icon="person"
-              v-model="form.last_name"
-              label="Last name"
-              type="text"
-              :error="v$.last_name.$error"
-              :error-message="v$.last_name.$errors[0]?.$message"
-              @blur="v$.last_name.$touch()"
-            />
+          <BaseInput
+            icon="person"
+            v-model="form.last_name"
+            label="Last name"
+            type="text"
+            :error="v$.last_name.$error"
+            :error-message="v$.last_name.$errors[0]?.$message"
+            @blur="v$.last_name.$touch()"
+          />
 
-            <BaseInput
-              icon="description"
-              v-model="form.biography"
-              label="Biography"
-              type="textarea"
-              :error="v$.biography.$error"
-              :error-message="v$.biography.$errors[0]?.$message"
-              @blur="v$.biography.$touch()"
-            />
+          <BaseInput
+            icon="description"
+            v-model="form.biography"
+            label="Biography"
+            type="textarea"
+            :error="v$.biography.$error"
+            :error-message="v$.biography.$errors[0]?.$message"
+            @blur="v$.biography.$touch()"
+          />
 
-            <div class="text-center">
-              <q-btn
-                label="Update"
-                type="submit"
-                rounded
-                :loading="isLoading"
-                color="primary"
-                class="full-width q-mb-lg"
-              >
-                <template v-slot:loading>
-                  <q-spinner-facebook />
-                </template>
-              </q-btn>
-              <q-btn
-                label="Cancel"
-                outline
-                rounded
-                color="grey-9"
-                class="full-width q-mb-lg"
-                @click="onDialogCancel"
-              />
-            </div>
+          <div class="row justify-center fixed-bottom q-pb-lg q-gutter-sm">
+            <q-btn label="Save" type="submit" rounded :loading="isLoading" color="primary">
+              <template v-slot:loading>
+                <q-spinner-facebook />
+              </template>
+            </q-btn>
+            <q-btn label="Cancel" outline rounded color="grey-9" @click="onDialogCancel" />
           </div>
         </q-form>
       </q-card-section>
