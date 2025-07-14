@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, sameAs, helpers } from '@vuelidate/validators'
 import { useRoute, useRouter } from 'vue-router'
-import BaseInput from 'src/components/form/BaseInput.vue'
+import InputBase from 'src/components/form/InputBase.vue'
 import PasswordCriteria from 'src/components/PasswordCriteria.vue'
 import useNotify from 'src/composables/UseNotify'
 import useAuth from 'src/composables/UseAuth'
@@ -75,23 +75,22 @@ function onReset() {
             </div>
           </q-card-section>
           <q-card-section class="column q-gutter-sm">
-            <BaseInput
+            <InputBase
+              type="password"
+              label="Password"
               icon="lock"
               v-model="form.password"
-              label="Password"
-              type="password"
               :error="v$.password.$error"
               :error-message="v$.password.$errors[0]?.$message"
               @blur="v$.password.$touch()"
             />
 
             <PasswordCriteria :passwordValue="form.password" />
-
-            <BaseInput
+            <InputBase
+              type="password"
+              label="Confirm password"
               icon="lock"
               v-model="form.confirmPassword"
-              label="Confirm password"
-              type="password"
               :error="v$.confirmPassword.$error"
               :error-message="v$.confirmPassword.$errors[0]?.$message"
               @blur="v$.confirmPassword.$touch()"

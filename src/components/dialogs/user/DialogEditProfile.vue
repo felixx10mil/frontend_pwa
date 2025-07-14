@@ -6,8 +6,8 @@ import { required, alpha } from '@vuelidate/validators'
 import { api } from 'boot/axios'
 import useNotify from 'src/composables/UseNotify'
 import { useAuthStore } from 'src/stores/auth-storage'
-import BaseInput from 'src/components/form/BaseInput.vue'
 import DialogHeaderBack from '../DialogHeaderBack.vue'
+import InputBase from 'src/components/form/InputBase.vue'
 
 const props = defineProps({
   data: { type: Object, required: true },
@@ -94,44 +94,44 @@ watchEffect(() => {
     <q-card class="q-dialog-plugin">
       <DialogHeaderBack title="Profile" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
-        <q-form @submit.prevent="handleUpdateProfile" class="q-pa-md q-gutter-md">
-          <BaseInput
+        <q-form @submit.prevent="handleUpdateProfile" class="q-gutter-y-sm">
+          <InputBase
+            type="text"
+            label="First name"
             icon="person"
             v-model="form.first_name"
-            label="First name"
-            type="text"
             :error="v$.first_name.$error"
             :error-message="v$.first_name.$errors[0]?.$message"
             @blur="v$.first_name.$touch()"
           />
 
-          <BaseInput
+          <InputBase
+            type="text"
+            label="Last name"
             icon="person"
             v-model="form.last_name"
-            label="Last name"
-            type="text"
             :error="v$.last_name.$error"
             :error-message="v$.last_name.$errors[0]?.$message"
             @blur="v$.last_name.$touch()"
           />
 
-          <BaseInput
+          <InputBase
+            type="textarea"
+            label="Biography"
             icon="description"
             v-model="form.biography"
-            label="Biography"
-            type="textarea"
             :error="v$.biography.$error"
             :error-message="v$.biography.$errors[0]?.$message"
             @blur="v$.biography.$touch()"
           />
 
-          <div class="row justify-center fixed-bottom q-pb-lg q-gutter-sm">
-            <q-btn label="Save" type="submit" rounded :loading="isLoading" color="primary">
+          <div class="row justify-center fixed-bottom q-pa-lg q-gutter-x-sm">
+            <q-btn label="Save" type="submit" :loading="isLoading" color="primary">
               <template v-slot:loading>
                 <q-spinner-facebook />
               </template>
             </q-btn>
-            <q-btn label="Cancel" outline rounded color="grey-9" @click="onDialogCancel" />
+            <q-btn label="Cancel" outline color="grey-9" @click="onDialogCancel" />
           </div>
         </q-form>
       </q-card-section>

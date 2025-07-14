@@ -1,18 +1,20 @@
 <script setup>
 defineProps({
+  type: {
+    type: String,
+    default: 'text',
+  },
   label: {
+    type: String,
+    default: '',
+  },
+  icon: {
     type: String,
     required: true,
     default: '',
   },
   modelValue: {
     type: [String, Number],
-    required: true,
-    default: '',
-  },
-  icon: {
-    type: String,
-    required: true,
     default: '',
   },
 })
@@ -21,7 +23,7 @@ defineProps({
   <q-input
     dense
     outlined
-    v-bind="$attrs"
+    :type="type"
     :label="label"
     :model-value="modelValue"
     @update:model-value="(value) => $emit('update:modelValue', value)"
@@ -31,4 +33,3 @@ defineProps({
     </template>
   </q-input>
 </template>
-<style scoped></style>

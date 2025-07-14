@@ -7,7 +7,7 @@ import { api } from 'boot/axios'
 import BarDialog from '../BarDialog.vue'
 import useNotify from 'src/composables/UseNotify'
 import PasswordCriteria from 'src/components/PasswordCriteria.vue'
-import BaseInput from 'src/components/form/BaseInput.vue'
+import InputBase from 'src/components/form/InputBase.vue'
 
 defineEmits([...useDialogPluginComponent.emits])
 
@@ -100,41 +100,41 @@ const onUpdateModalSize = (value) => {
       <q-card-section>
         <q-form class="row justify-center full-width" @submit.prevent="handleCreateUser">
           <div class="col-12 q-gutter-y-md">
-            <BaseInput
+            <InputBase
+              type="text"
+              label="First name"
               icon="person"
               v-model="form.firstName"
-              label="First name"
-              type="text"
               :error="v$.firstName.$error"
               :error-message="v$.firstName.$errors[0]?.$message"
               @blur="v$.firstName.$touch()"
             />
 
-            <BaseInput
+            <InputBase
+              type="text"
+              label="Last name"
               icon="person"
               v-model="form.lastName"
-              label="Last name"
-              type="text"
               :error="v$.lastName.$error"
               :error-message="v$.lastName.$errors[0]?.$message"
               @blur="v$.lastName.$touch()"
             />
 
-            <BaseInput
+            <InputBase
+              type="email"
+              label="Email"
               icon="alternate_email"
               v-model="form.email"
-              label="Email"
-              type="email"
               :error="v$.email.$error"
               :error-message="v$.email.$errors[0]?.$message"
               @blur="v$.email.$touch()"
             />
 
-            <BaseInput
+            <InputBase
+              type="password"
+              label="Password"
               icon="lock"
               v-model="form.password"
-              label="Password"
-              type="password"
               :error="v$.password.$error"
               :error-message="v$.password.$errors[0]?.$message"
               @blur="v$.password.$touch()"
@@ -142,11 +142,11 @@ const onUpdateModalSize = (value) => {
 
             <PasswordCriteria :passwordValue="form.password" />
 
-            <BaseInput
+            <InputBase
+              type="password"
+              label="Confirm password"
               icon="lock"
               v-model="form.confirmPassword"
-              label="Confirm password"
-              type="password"
               :error="v$.confirmPassword.$error"
               :error-message="v$.confirmPassword.$errors[0]?.$message"
               @blur="v$.confirmPassword.$touch()"

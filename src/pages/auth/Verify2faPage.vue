@@ -1,23 +1,24 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
-import { useRouter } from 'vue-router'
-import useNotify from 'src/composables/UseNotify'
+import { required, numeric, maxLength } from '@vuelidate/validators'
+import { useRoute, useRouter } from 'vue-router'
 import InputBase from 'src/components/form/InputBase.vue'
+import useNotify from 'src/composables/UseNotify'
 import useAuth from 'src/composables/UseAuth.js'
-const { sendAuthEmail } = useAuth()
+const { verify2Fa } = useAuth()
 const { notifySuccess } = useNotify()
 const router = useRouter()
+const route = useRoute()
 
 // Data
 const form = ref({
-  email: '',
+  code: '',
 })
 
 // Rules
 const rules = computed(() => ({
-  email: { required, email },
+  code: { required, numeric, maxLengthValue: maxLength(6) },
 }))
 
 const v$ = useVuelidate(rules, form)
@@ -25,14 +26,14 @@ const v$ = useVuelidate(rules, form)
 async function handleForgotPassword() {
   const isFormValid = await v$.value.$validate()
   if (isFormValid) {
-    const response = await sendAuthEmail('/api/v1/auth/send/authEmail', form.value)
+    const response = await verify2Fa('/api/v1/auth/verify/2fa', route.params.token, form.value)
     if (response && response.status === 'OK') {
       // Reset form
       onReset()
       // Message
       notifySuccess(response.message)
       // Redirect
-      router.push({ name: 'loginByEmail' })
+      router.push({ name: 'home' })
     }
   }
 }
@@ -40,7 +41,7 @@ async function handleForgotPassword() {
 //onReset
 function onReset() {
   form.value = {
-    email: '',
+    code: '',
   }
 }
 </script>
@@ -52,25 +53,28 @@ function onReset() {
       <q-card class="no-shadow transparent create-card">
         <q-form @submit.prevent="handleForgotPassword">
           <q-card-section>
-            <div class="text-h6 text-weight-bold">Login by e-mail</div>
+            <div class="text-h6 text-weight-bold">
+              Please verify your identity to proceed with the login
+            </div>
             <div class="text-subtitle1" style="opacity: 0.4">
-              Enter the e-mail address associated with your account.
+              An email with the verification code has been sent to the email provided. Please enter
+              the code in the field below to continue.
             </div>
           </q-card-section>
           <q-card-section>
             <InputBase
-              type="email"
-              label="E-mail"
-              icon="alternate_email"
-              v-model="form.email"
-              :error="v$.email.$error"
-              :error-message="v$.email.$errors[0]?.$message"
-              @blur="v$.email.$touch()"
+              type="text"
+              label="Verification code"
+              icon="numbers"
+              v-model="form.code"
+              :error="v$.code.$error"
+              :error-message="v$.code.$errors[0]?.$message"
+              @blur="v$.code.$touch()"
             />
           </q-card-section>
           <q-card-actions vertical align="center" class="q-ma-sm">
             <q-btn rounded color="primary" type="submit" class="full-width q-mb-lg" no-caps
-              >Send Email</q-btn
+              >Verify code</q-btn
             >
             <p class="text-grey">
               <router-link class="text-accent" :to="{ name: 'login' }" style="text-decoration: none"

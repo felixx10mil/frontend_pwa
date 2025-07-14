@@ -74,18 +74,21 @@ function onReset() {
     <q-card class="q-dialog-plugin">
       <DialogHeaderBack title="Photo" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
-        <q-form @submit.prevent="handleUpdatePhoto" class="q-pa-md q-gutter-md">
+        <q-form @submit.prevent="handleUpdatePhoto" class="q-gutter-y-md">
+          <div class="text-caption">
+            You can upload an image of maximum size 2k, please compress the image before uploading
+            it to decrease its size.
+          </div>
           <q-file
             v-model="form.file"
             label="File"
             outlined
             bottom-slots
-            max-file-size="300000"
+            max-file-size="2048"
             :max-files="1"
             accept=".jpg,.jpeg"
             clearable
             counter
-            hint="Note: You can upload an image of maximum size 300KB, please compress the image before uploading it to decrease its size."
             @rejected="onRejected"
           >
             <template v-slot:prepend>
@@ -93,13 +96,13 @@ function onReset() {
             </template>
           </q-file>
 
-          <div class="row justify-center fixed-bottom q-pb-lg q-gutter-sm">
-            <q-btn label="Save" type="submit" rounded :loading="isLoading" color="primary">
+          <div class="row justify-center fixed-bottom q-pa-lg q-gutter-x-sm">
+            <q-btn label="Save" type="submit" :loading="isLoading" color="primary">
               <template v-slot:loading>
                 <q-spinner-facebook />
               </template>
             </q-btn>
-            <q-btn label="Cancel" outline rounded color="grey-9" @click="onDialogCancel" />
+            <q-btn label="Cancel" outline color="grey-9" @click="onDialogCancel" />
           </div>
         </q-form>
       </q-card-section>

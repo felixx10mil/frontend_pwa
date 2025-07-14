@@ -7,7 +7,7 @@ import { required, alpha, email } from '@vuelidate/validators'
 import { api } from 'boot/axios'
 import { useAuthStore } from 'src/stores/auth-storage'
 import useNotify from 'src/composables/UseNotify'
-import BaseInput from 'src/components/form/BaseInput.vue'
+import InputBase from 'src/components/form/InputBase.vue'
 import DialogHeaderBack from '../DialogHeaderBack.vue'
 
 const props = defineProps({
@@ -93,44 +93,44 @@ watchEffect(() => {
     <q-card class="q-dialog-plugin">
       <DialogHeaderBack title="Account" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
-        <q-form @submit.prevent="handleUpdateAccount" class="q-pa-md q-gutter-md">
-          <BaseInput
+        <q-form @submit.prevent="handleUpdateAccount" class="q-gutter-y-sm">
+          <InputBase
+            type="password"
+            label="Current password"
             icon="lock"
             v-model="form.currentPassword"
-            label="Current password"
-            type="password"
             :error="v$.currentPassword.$error"
             :error-message="v$.currentPassword.$errors[0]?.$message"
             @blur="v$.currentPassword.$touch()"
           />
 
-          <BaseInput
+          <InputBase
+            type="text"
+            label="Name"
             icon="person"
             v-model="form.name"
-            label="Name"
-            type="text"
             :error="v$.name.$error"
             :error-message="v$.name.$errors[0]?.$message"
             @blur="v$.name.$touch()"
           />
 
-          <BaseInput
+          <InputBase
+            type="email"
+            label="Email"
             icon="email"
             v-model="form.email"
-            label="Email"
-            type="email"
             :error="v$.email.$error"
             :error-message="v$.email.$errors[0]?.$message"
             @blur="v$.email.$touch()"
           />
 
-          <div class="row justify-center fixed-bottom q-pb-lg q-gutter-sm">
-            <q-btn label="Save" type="submit" rounded :loading="isLoading" color="primary">
+          <div class="row justify-center fixed-bottom q-pa-lg q-gutter-x-sm">
+            <q-btn label="Save" type="submit" :loading="isLoading" color="primary">
               <template v-slot:loading>
                 <q-spinner-facebook />
               </template>
             </q-btn>
-            <q-btn label="Cancel" outline rounded color="grey-9" @click="onDialogCancel" />
+            <q-btn label="Cancel" outline color="grey-9" @click="onDialogCancel" />
           </div>
         </q-form>
       </q-card-section>

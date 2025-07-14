@@ -10,9 +10,11 @@ import DialogEditProfile from 'src/components/dialogs/user/DialogEditProfile.vue
 import DarkMode from 'src/components/DarkMode.vue'
 import UserInfo from 'src/components/users/UserInfo.vue'
 import SettingSkeleton from 'src/components/skeletons/SettingSkeleton.vue'
+import Active2Fa from 'src/components/Active2Fa.vue'
 
 const $q = useQuasar()
 const store = useAuthStore()
+
 const { user, refreshUser } = useFetchUser(`/api/v1/users/${store.getStateId}`)
 const { logout } = useAuth()
 
@@ -74,6 +76,19 @@ function handleLogout() {
         </q-item-section>
         <q-item-section side top>
           <DarkMode sizeToggle="xl" />
+        </q-item-section>
+      </q-item>
+      <q-item v-ripple>
+        <q-item-section avatar top>
+          <q-avatar icon="sync_lock" color="primary" text-color="white" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>2FA</q-item-label>
+          <q-item-label caption> Enables two-factor authentication </q-item-label>
+        </q-item-section>
+        <q-item-section side top>
+          <!-- Recibe props id,statusUser -->
+          <Active2Fa :id="user.id" :f2a="user.is2fa" />
         </q-item-section>
       </q-item>
       <q-item clickable v-ripple @click="updatePassword">

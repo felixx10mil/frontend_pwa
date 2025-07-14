@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
-import BaseInput from 'src/components/form/BaseInput.vue'
+import InputBase from 'src/components/form/InputBase.vue'
 import useNotify from 'src/composables/UseNotify.js'
 import useAuth from 'src/composables/UseAuth'
 
@@ -29,12 +29,17 @@ async function handleLogin() {
   if (isFormValid) {
     const response = await login('/api/v1/auth/login', form.value)
     if (response && response.status === 'OK') {
-      // Reset form
-      onReset()
-      // Message
-      notifySuccess(response.message)
-      // Redirect
-      router.push({ name: 'home' })
+      if (response.is2faEnabled === 'active') {
+        router.push({ name: 'two-factor', params: { token: response.token } })
+        notifySuccess(response.message)
+      } else {
+        // Reset form
+        onReset()
+        // Message
+        notifySuccess(response.message)
+        // Redirect
+        router.push({ name: 'home' })
+      }
     }
   }
 }
@@ -59,20 +64,20 @@ function onReset() {
             <div class="text-subtitle1" style="opacity: 0.4">Enter your credentials.</div>
           </q-card-section>
           <q-card-section class="column q-gutter-sm">
-            <BaseInput
+            <InputBase
+              type="email"
+              label="E-mail"
               icon="alternate_email"
               v-model="form.email"
-              label="Email"
-              type="email"
               :error="v$.email.$error"
               :error-message="v$.email.$errors[0]?.$message"
               @blur="v$.email.$touch()"
             />
-            <BaseInput
+            <InputBase
+              type="password"
+              label="Password"
               icon="lock"
               v-model="form.password"
-              label="Password"
-              type="password"
               :error="v$.password.$error"
               :error-message="v$.password.$errors[0]?.$message"
               @blur="v$.password.$touch()"

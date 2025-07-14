@@ -5,8 +5,8 @@ import { required, alpha, email, sameAs, helpers } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
 import useNotify from 'src/composables/UseNotify'
 import PasswordCriteria from 'src/components/PasswordCriteria.vue'
-import BaseInput from 'src/components/form/BaseInput.vue'
 import useAuth from 'src/composables/UseAuth.js'
+import InputBase from 'src/components/form/InputBase.vue'
 
 const { signup } = useAuth()
 const { notifySuccess } = useNotify()
@@ -76,41 +76,41 @@ function onReset() {
             <div class="text-subtitle1" style="opacity: 0.4">Enter your personal information.</div>
           </q-card-section>
           <q-card-section class="column q-gutter-sm">
-            <BaseInput
+            <InputBase
+              type="text"
+              label="First name"
               icon="person"
               v-model="form.firstName"
-              label="FirstName"
-              type="text"
               :error="v$.firstName.$error"
               :error-message="v$.firstName.$errors[0]?.$message"
               @blur="v$.firstName.$touch()"
             />
 
-            <BaseInput
+            <InputBase
+              type="text"
+              label="Last name"
               icon="person"
               v-model="form.lastName"
-              label="LastName"
-              type="text"
               :error="v$.lastName.$error"
               :error-message="v$.lastName.$errors[0]?.$message"
               @blur="v$.lastName.$touch()"
             />
 
-            <BaseInput
+            <InputBase
+              type="email"
+              label="E-mail"
               icon="alternate_email"
               v-model="form.email"
-              label="Email"
-              type="email"
               :error="v$.email.$error"
               :error-message="v$.email.$errors[0]?.$message"
               @blur="v$.email.$touch()"
             />
 
-            <BaseInput
-              icon="lock"
-              v-model="form.password"
+            <InputBase
               label="Password"
               type="password"
+              icon="lock"
+              v-model="form.password"
               :error="v$.password.$error"
               :error-message="v$.password.$errors[0]?.$message"
               @blur="v$.password.$touch()"
@@ -118,11 +118,11 @@ function onReset() {
 
             <PasswordCriteria :passwordValue="form.password" />
 
-            <BaseInput
+            <InputBase
+              type="password"
+              label="Confirm password"
               icon="lock"
               v-model="form.confirmPassword"
-              label="Confirm password"
-              type="password"
               :error="v$.confirmPassword.$error"
               :error-message="v$.confirmPassword.$errors[0]?.$message"
               @blur="v$.confirmPassword.$touch()"

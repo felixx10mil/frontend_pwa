@@ -64,7 +64,7 @@ async function handleUpdateRole() {
     <q-card class="q-dialog-plugin">
       <DialogHeaderBack title="Roles" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
-        <q-form @submit.prevent="handleUpdateRole" class="q-pa-md q-gutter-md">
+        <q-form @submit.prevent="handleUpdateRole" class="q-gutter-y-sm">
           <q-option-group
             v-model="form.roles"
             :options="options.roles"
@@ -72,13 +72,13 @@ async function handleUpdateRole() {
             type="checkbox"
           />
 
-          <div class="row justify-center fixed-bottom q-pb-lg q-gutter-sm">
-            <q-btn label="SAVE" type="submit" rounded :loading="isLoading" color="primary">
+          <div class="row justify-center fixed-bottom q-pa-lg q-gutter-x-sm">
+            <q-btn label="SAVE" type="submit" :loading="isLoading" color="primary">
               <template v-slot:loading>
                 <q-spinner-facebook />
               </template>
             </q-btn>
-            <q-btn label="Cancel" outline rounded color="grey-9" @click="onDialogCancel" />
+            <q-btn label="Cancel" outline color="grey-9" @click="onDialogCancel" />
           </div>
         </q-form>
       </q-card-section>

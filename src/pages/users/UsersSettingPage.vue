@@ -62,13 +62,11 @@ function userDelete() {
       <q-separator />
       <q-item v-ripple>
         <q-item-section avatar top>
-          <q-avatar icon="published_with_changes" color="primary" text-color="white" />
+          <q-avatar icon="change_circle" color="primary" text-color="white" />
         </q-item-section>
         <q-item-section>
           <q-item-label>Status</q-item-label>
-          <q-item-label caption>
-            Change the user's status by activating or deactivating his account
-          </q-item-label>
+          <q-item-label caption> Activate or deactivate the user's account </q-item-label>
         </q-item-section>
         <q-item-section side top>
           <!-- Recibe props id,statusUser -->

@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
-import BaseInput from 'src/components/form/BaseInput.vue'
+import InputBase from 'src/components/form/InputBase.vue'
 import useNotify from 'src/composables/UseNotify'
 import useAuth from 'src/composables/UseAuth.js'
 const { forgotPassword } = useAuth()
@@ -57,11 +57,11 @@ function onReset() {
             </div>
           </q-card-section>
           <q-card-section>
-            <BaseInput
+            <InputBase
+              type="email"
+              label="E-mail"
               icon="alternate_email"
               v-model="form.email"
-              label="Email"
-              type="email"
               :error="v$.email.$error"
               :error-message="v$.email.$errors[0]?.$message"
               @blur="v$.email.$touch()"

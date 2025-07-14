@@ -7,7 +7,7 @@ import { api } from 'boot/axios'
 import { useAuthStore } from 'src/stores/auth-storage'
 import useNotify from 'src/composables/UseNotify'
 import PasswordCriteria from 'src/components/PasswordCriteria.vue'
-import BaseInput from 'src/components/form/BaseInput.vue'
+import InputBase from 'src/components/form/InputBase.vue'
 import DialogHeaderBack from '../DialogHeaderBack.vue'
 
 defineEmits([...useDialogPluginComponent.emits])
@@ -90,22 +90,22 @@ function onReset() {
     <q-card class="q-dialog-plugin">
       <DialogHeaderBack title="Password" @customDialogCancel="onDialogCancel()" />
       <q-card-section>
-        <q-form @submit.prevent="handleUpdatePassword" class="q-pa-md q-gutter-md">
-          <BaseInput
+        <q-form @submit.prevent="handleUpdatePassword" class="q-gutter-y-sm">
+          <InputBase
+            type="password"
+            label="Current password"
             icon="lock"
             v-model="form.currentPassword"
-            label="Current password"
-            type="password"
             :error="v$.currentPassword.$error"
             :error-message="v$.currentPassword.$errors[0]?.$message"
             @blur="v$.currentPassword.$touch()"
           />
 
-          <BaseInput
+          <InputBase
+            type="password"
+            label="New password"
             icon="lock"
             v-model="form.newPassword"
-            label="New password"
-            type="password"
             :error="v$.newPassword.$error"
             :error-message="v$.newPassword.$errors[0]?.$message"
             @blur="v$.newPassword.$touch()"
@@ -113,23 +113,23 @@ function onReset() {
 
           <PasswordCriteria :passwordValue="form.newPassword" />
 
-          <BaseInput
+          <InputBase
+            type="password"
+            label="Confirm password"
             icon="lock"
             v-model="form.confirmPassword"
-            label="Confirm password"
-            type="password"
             :error="v$.confirmPassword.$error"
             :error-message="v$.confirmPassword.$errors[0]?.$message"
             @blur="v$.confirmPassword.$touch()"
           />
 
-          <div class="row justify-center fixed-bottom q-pb-lg q-gutter-sm">
-            <q-btn label="Save" type="submit" rounded :loading="isLoading" color="primary">
+          <div class="row justify-center fixed-bottom q-pa-lg q-gutter-x-sm">
+            <q-btn label="Save" type="submit" :loading="isLoading" color="primary">
               <template v-slot:loading>
                 <q-spinner-facebook />
               </template>
             </q-btn>
-            <q-btn label="Cancel" outline rounded color="grey-9" @click="onDialogCancel" />
+            <q-btn label="Cancel" outline color="grey-9" @click="onDialogCancel" />
           </div>
         </q-form>
       </q-card-section>

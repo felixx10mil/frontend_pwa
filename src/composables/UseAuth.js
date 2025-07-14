@@ -29,6 +29,47 @@ export default function useAuth() {
           password,
         },
       })
+      // Is2fa
+      if (data.data.user.is2fa === 'inactive') {
+        // Set store auth
+        store.$patch({
+          isAuth: true,
+          id: data.data.user.id,
+          name: data.data.user.name,
+          token: data.data.token,
+        })
+      }
+      return {
+        status: data.status,
+        is2faEnabled: data.data.user.is2fa,
+        token: data.data.token,
+        message: data.message,
+      }
+    } catch (err) {
+      if (err) console.log('Oops!')
+    } finally {
+      $q.loading.hide()
+    }
+  }
+
+  /**
+   * verify 2fa
+   * @param {*} url
+   * @param {*} token
+   * @param {*} code
+   * @returns
+   */
+  async function verify2Fa(url, token, { code }) {
+    $q.loading.show({
+      message: 'Loading...',
+    })
+    try {
+      // Enviar una petición POST
+      const { data } = await api({
+        method: 'post',
+        url: url,
+        data: { token, code },
+      })
 
       // Set store auth
       store.$patch({
@@ -37,7 +78,11 @@ export default function useAuth() {
         name: data.data.user.name,
         token: data.data.token,
       })
-      return { status: data.status, message: data.message }
+
+      return {
+        status: data.status,
+        message: data.message,
+      }
     } catch (err) {
       if (err) console.log('Oops!')
     } finally {
@@ -96,7 +141,7 @@ export default function useAuth() {
         isAuth: true,
         id: data.data.user.id,
         name: data.data.user.name,
-        token: data.data.key,
+        token: data.data.token,
       })
       return { status: data.status, message: data.message }
     } catch (err) {
@@ -247,6 +292,7 @@ export default function useAuth() {
 
   return {
     login,
+    verify2Fa,
     sendAuthEmail,
     verifyAuthEmail,
     signup,

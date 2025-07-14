@@ -68,6 +68,14 @@ const routes = [
           requiresAuth: false,
         },
       },
+      {
+        path: '/two-factor/auth/:token',
+        name: 'two-factor',
+        component: () => import('src/pages/auth/Verify2faPage.vue'),
+        meta: {
+          requiresAuth: false,
+        },
+      },
     ],
   },
   {
