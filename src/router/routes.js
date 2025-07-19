@@ -61,9 +61,9 @@ const routes = [
         },
       },
       {
-        path: '/confirm/account/:token',
+        path: '/confirm/email/:token',
         name: 'confirm',
-        component: () => import('src/pages/auth/ConfirmAccountPage.vue'),
+        component: () => import('src/pages/auth/ConfirmEmailPage.vue'),
         meta: {
           requiresAuth: false,
         },

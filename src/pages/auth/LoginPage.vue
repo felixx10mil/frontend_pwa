@@ -5,10 +5,12 @@ import { required, email } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
 import InputBase from 'src/components/form/InputBase.vue'
 import useNotify from 'src/composables/UseNotify.js'
-import useAuth from 'src/composables/UseAuth'
+import useFetchAuth from 'src/composables/fetchAuth'
+import useSetStorage from 'src/composables/useSetStorage'
 
-const { login } = useAuth()
+const { login } = useFetchAuth()
 const { notifySuccess } = useNotify()
+const { setAuth } = useSetStorage()
 const router = useRouter()
 // Data
 const form = ref({
@@ -29,16 +31,18 @@ async function handleLogin() {
   if (isFormValid) {
     const response = await login('/api/v1/auth/login', form.value)
     if (response && response.status === 'OK') {
-      if (response.is2faEnabled === 'active') {
-        router.push({ name: 'two-factor', params: { token: response.token } })
+      if (response.is2fa === 'active') {
+        router.replace({ name: 'two-factor', params: { token: response.token } })
         notifySuccess(response.message)
       } else {
+        // Set storage
+        setAuth(true, response.id, response.name, response.token)
         // Reset form
         onReset()
         // Message
         notifySuccess(response.message)
         // Redirect
-        router.push({ name: 'home' })
+        router.replace({ name: 'home' })
       }
     }
   }

@@ -5,9 +5,12 @@ import { required, numeric, maxLength } from '@vuelidate/validators'
 import { useRoute, useRouter } from 'vue-router'
 import InputBase from 'src/components/form/InputBase.vue'
 import useNotify from 'src/composables/UseNotify'
-import useAuth from 'src/composables/UseAuth.js'
-const { verify2Fa } = useAuth()
+import useFetchAuth from 'src/composables/fetchAuth.js'
+import useSetStorage from 'src/composables/useSetStorage'
+
+const { verify2Fa } = useFetchAuth()
 const { notifySuccess } = useNotify()
+const { setAuth } = useSetStorage()
 const router = useRouter()
 const route = useRoute()
 
@@ -28,12 +31,14 @@ async function handleForgotPassword() {
   if (isFormValid) {
     const response = await verify2Fa('/api/v1/auth/verify/2fa', route.params.token, form.value)
     if (response && response.status === 'OK') {
+      // Set storage
+      setAuth(true, response.id, response.name, response.token)
       // Reset form
       onReset()
       // Message
       notifySuccess(response.message)
       // Redirect
-      router.push({ name: 'home' })
+      router.replace({ name: 'home' })
     }
   }
 }

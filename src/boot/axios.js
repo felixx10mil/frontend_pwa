@@ -1,5 +1,5 @@
-import { defineBoot } from '#q-app/wrappers'
 import axios from 'axios'
+import { defineBoot } from '#q-app/wrappers'
 import { useAuthStore } from 'src/stores/auth-storage'
 import { Notify } from 'quasar'
 
@@ -13,7 +13,6 @@ import { Notify } from 'quasar'
 const api = axios.create({
   baseURL: process.env.API_URL,
   'Content-Type': 'application/json;charset=UTF-8',
-  timeout: 10000, // Timeout
 })
 
 export default defineBoot(({ router, app, store }) => {
@@ -39,6 +38,7 @@ export default defineBoot(({ router, app, store }) => {
         Notify.create({
           position: 'top',
           type: 'negative',
+          icon: 'report_problem',
           message: `${error.response.data.message}`,
           actions: [
             {
@@ -60,7 +60,7 @@ export default defineBoot(({ router, app, store }) => {
         Notify.create({
           position: 'top',
           type: 'negative',
-          icon: 'report',
+          icon: 'report_problem',
           message: 'No response received from server',
         })
       } else {
@@ -68,7 +68,7 @@ export default defineBoot(({ router, app, store }) => {
         Notify.create({
           position: 'top',
           type: 'negative',
-          icon: 'report',
+          icon: 'report_problem',
           message: error.message || 'Request setup error!',
         })
       }

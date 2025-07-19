@@ -1,16 +1,16 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
 import useNotify from 'src/composables/UseNotify'
-import useAuth from 'src/composables/UseAuth.js'
+import useFetchAuth from 'src/composables/fetchAuth.js'
 
 const router = useRouter()
 const route = useRoute()
 
 const { notifySuccess } = useNotify()
-const { confirmEmail } = useAuth()
+const { confirmEmail } = useFetchAuth()
 
 async function handleConfirmAccount() {
-  const response = await confirmEmail('/api/v1/auth/confirm/account', route.params.token)
+  const response = await confirmEmail('/api/v1/auth/confirm/email', route.params.token)
   if (response && response.status === 'OK') {
     // Message
     notifySuccess(response.message)
@@ -22,11 +22,10 @@ async function handleConfirmAccount() {
 handleConfirmAccount()
 </script>
 <template>
-  <q-page class="window-height window-width row justify-center items-center">
-    <div class="column q-pa-lg">
-      <div class="row">
-        <p class="col-12 text-h5 text-center">Confirming your account...</p>
-      </div>
+  <q-page class="flex flex-center">
+    <div class="column items-center">
+      <img alt="Email check" src="~assets/email_check.svg" style="width: 200px; height: 200px" />
+      <p class="col-12 text-h5 text-center">Confirming your email address...</p>
     </div>
   </q-page>
 </template>

@@ -1,12 +1,42 @@
 import { useQuasar } from 'quasar'
 import { api } from 'src/boot/axios'
-import { useAuthStore } from 'src/stores/auth-storage'
-import { useRouter } from 'vue-router'
 
-export default function useAuth() {
+export default function useFetchAuth() {
   const $q = useQuasar()
-  const store = useAuthStore()
-  const router = useRouter()
+
+  /**
+   * Register user
+   * @param {*} url
+   * @param {*} email
+   * @param {*} password
+   * @param {*} confirmPassword
+   * @returns
+   */
+  async function signup(url, { firstName, lastName, email, password, confirmPassword }) {
+    $q.loading.show({
+      message: 'Loading...',
+    })
+
+    try {
+      // Enviar una petición POST
+      const { data } = await api({
+        method: 'post',
+        url: url,
+        data: {
+          firstName,
+          lastName,
+          email,
+          password,
+          confirmPassword,
+        },
+      })
+      return data
+    } catch (err) {
+      if (err) console.log('Oops!')
+    } finally {
+      $q.loading.hide()
+    }
+  }
 
   /**
    * Login user
@@ -29,19 +59,12 @@ export default function useAuth() {
           password,
         },
       })
-      // Is2fa
-      if (data.data.user.is2fa === 'inactive') {
-        // Set store auth
-        store.$patch({
-          isAuth: true,
-          id: data.data.user.id,
-          name: data.data.user.name,
-          token: data.data.token,
-        })
-      }
+
       return {
         status: data.status,
-        is2faEnabled: data.data.user.is2fa,
+        id: data.data.user.id,
+        name: data.data.user.name,
+        is2fa: data.data.user.is2fa,
         token: data.data.token,
         message: data.message,
       }
@@ -70,17 +93,11 @@ export default function useAuth() {
         url: url,
         data: { token, code },
       })
-
-      // Set store auth
-      store.$patch({
-        isAuth: true,
+      return {
+        status: data.status,
         id: data.data.user.id,
         name: data.data.user.name,
         token: data.data.token,
-      })
-
-      return {
-        status: data.status,
         message: data.message,
       }
     } catch (err) {
@@ -136,48 +153,13 @@ export default function useAuth() {
         },
       })
 
-      // Set store auth
-      store.$patch({
-        isAuth: true,
+      return {
+        status: data.status,
         id: data.data.user.id,
         name: data.data.user.name,
         token: data.data.token,
-      })
-      return { status: data.status, message: data.message }
-    } catch (err) {
-      if (err) console.log('Oops!')
-    } finally {
-      $q.loading.hide()
-    }
-  }
-
-  /**
-   * Register user
-   * @param {*} url
-   * @param {*} email
-   * @param {*} password
-   * @param {*} confirmPassword
-   * @returns
-   */
-  async function signup(url, { firstName, lastName, email, password, confirmPassword }) {
-    $q.loading.show({
-      message: 'Loading...',
-    })
-
-    try {
-      // Enviar una petición POST
-      const { data } = await api({
-        method: 'post',
-        url: url,
-        data: {
-          firstName,
-          lastName,
-          email,
-          password,
-          confirmPassword,
-        },
-      })
-      return data
+        message: data.message,
+      }
     } catch (err) {
       if (err) console.log('Oops!')
     } finally {
@@ -274,31 +256,14 @@ export default function useAuth() {
     }
   }
 
-  /**
-   * Logout
-   * @returns
-   */
-  async function logout() {
-    $q.dialog({
-      title: 'Log out',
-      message: 'You want to log out?',
-      cancel: true,
-      persistent: true,
-    }).onOk(() => {
-      router.push({ name: 'login' })
-      store.$reset()
-    })
-  }
-
   return {
+    signup,
     login,
     verify2Fa,
     sendAuthEmail,
     verifyAuthEmail,
-    signup,
     forgotPassword,
     resetPassword,
     confirmEmail,
-    logout,
   }
 }

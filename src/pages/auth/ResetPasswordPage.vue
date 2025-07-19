@@ -6,9 +6,9 @@ import { useRoute, useRouter } from 'vue-router'
 import InputBase from 'src/components/form/InputBase.vue'
 import PasswordCriteria from 'src/components/PasswordCriteria.vue'
 import useNotify from 'src/composables/UseNotify'
-import useAuth from 'src/composables/UseAuth'
+import useFetchAuth from 'src/composables/fetchAuth'
 
-const { resetPassword } = useAuth()
+const { resetPassword } = useFetchAuth()
 const { notifySuccess } = useNotify()
 const router = useRouter()
 const route = useRoute()

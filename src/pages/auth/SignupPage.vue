@@ -5,10 +5,10 @@ import { required, alpha, email, sameAs, helpers } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
 import useNotify from 'src/composables/UseNotify'
 import PasswordCriteria from 'src/components/PasswordCriteria.vue'
-import useAuth from 'src/composables/UseAuth.js'
+import useFetchAuth from 'src/composables/fetchAuth.js'
 import InputBase from 'src/components/form/InputBase.vue'
 
-const { signup } = useAuth()
+const { signup } = useFetchAuth()
 const { notifySuccess } = useNotify()
 const router = useRouter()
 const passwd = helpers.regex(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{7,12}$/)
@@ -49,7 +49,7 @@ async function handleSignup() {
       // Message
       notifySuccess(response.message)
       // Redirect
-      router.push({ name: 'home' })
+      router.push({ name: 'login' })
     }
   }
 }

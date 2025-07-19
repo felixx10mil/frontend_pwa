@@ -5,8 +5,8 @@ import { required, email } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
 import InputBase from 'src/components/form/InputBase.vue'
 import useNotify from 'src/composables/UseNotify'
-import useAuth from 'src/composables/UseAuth.js'
-const { forgotPassword } = useAuth()
+import useFetchAuth from 'src/composables/fetchAuth.js'
+const { forgotPassword } = useFetchAuth()
 const { notifySuccess } = useNotify()
 const router = useRouter()
 // Data

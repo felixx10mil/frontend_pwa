@@ -1,4 +1,4 @@
-import { defineStore, acceptHMRUpdate } from 'pinia'
+import { defineStore } from 'pinia'
 
 export const useAuthStore = defineStore('authStore', {
   state: () => ({
@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('authStore', {
     name: null,
     token: null,
   }),
+  persist: true, // Note that we are using a persisted state here
   getters: {
     getStateAuth(state) {
       return state.isAuth
@@ -22,7 +23,3 @@ export const useAuthStore = defineStore('authStore', {
     },
   },
 })
-
-if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useAuthStore, import.meta.hot))
-}

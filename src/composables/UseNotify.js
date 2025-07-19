@@ -11,8 +11,7 @@ export default function useNotify() {
     $q.notify({
       position: 'top',
       type: 'positive',
-      icon: 'verified',
-      progress: true,
+      icon: 'done',
       message: message || 'All right!',
     })
   }
@@ -25,8 +24,7 @@ export default function useNotify() {
     $q.notify({
       position: 'top',
       type: 'negative',
-      icon: 'report',
-      progress: true,
+      icon: 'report_problem',
       message: message || 'Failed!',
     })
   }

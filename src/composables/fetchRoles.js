@@ -17,7 +17,7 @@ export function useFetchRoles(url) {
     try {
       const response = await api.get(toValue(url))
       if (response.data.status === 'OK') {
-        data.value = response.data.roles.roles
+        data.value = response.data.roles
       }
     } catch (err) {
       if (err) console.log('Oops!')

@@ -2,7 +2,7 @@
 import { useQuasar } from 'quasar'
 import { useAuthStore } from 'src/stores/auth-storage'
 import { useFetchUser } from 'src/composables/fetchUser'
-import useAuth from 'src/composables/UseAuth'
+import useSetStorage from 'src/composables/useSetStorage'
 import DialogEditPassword from 'src/components/dialogs/user/DialogEditPassword.vue'
 import DialogEditAccount from 'src/components/dialogs/user/DialogEditAccount.vue'
 import DialogEditPhoto from 'src/components/dialogs/user/DialogEditPhoto.vue'
@@ -14,9 +14,9 @@ import Active2Fa from 'src/components/Active2Fa.vue'
 
 const $q = useQuasar()
 const store = useAuthStore()
+const { resetAuth } = useSetStorage()
 
 const { user, refreshUser } = useFetchUser(`/api/v1/users/${store.getStateId}`)
-const { logout } = useAuth()
 
 function updatePassword() {
   $q.dialog({
@@ -57,7 +57,7 @@ function updateAccount() {
 }
 
 function handleLogout() {
-  logout()
+  resetAuth()
 }
 </script>
 
