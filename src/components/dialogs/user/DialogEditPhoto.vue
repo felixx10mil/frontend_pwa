@@ -17,7 +17,7 @@ const form = ref({
 const isLoading = ref(false)
 
 function onRejected() {
-  notifyError('The selected image exceeds 300KB')
+  notifyError('The selected image exceeds 10KB')
 }
 
 // Update Photo
@@ -76,7 +76,7 @@ function onReset() {
       <q-card-section>
         <q-form @submit.prevent="handleUpdatePhoto" class="q-gutter-y-md">
           <div class="text-caption">
-            You can upload an image of maximum size 2k, please compress the image before uploading
+            You can upload an image of maximum size 10KB, please compress the image before uploading
             it to decrease its size.
           </div>
           <q-file
@@ -84,7 +84,7 @@ function onReset() {
             label="File"
             outlined
             bottom-slots
-            max-file-size="2048"
+            max-file-size="10000"
             :max-files="1"
             accept=".jpg,.jpeg"
             clearable

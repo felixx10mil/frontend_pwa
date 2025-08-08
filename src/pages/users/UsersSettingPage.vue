@@ -59,7 +59,6 @@ function userDelete() {
   <q-page padding>
     <q-list v-if="user">
       <UserInfo :user="user" />
-      <q-separator />
       <q-item v-ripple>
         <q-item-section avatar top>
           <q-avatar icon="change_circle" color="primary" text-color="white" />

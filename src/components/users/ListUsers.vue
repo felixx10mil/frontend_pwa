@@ -40,16 +40,16 @@ const url_base = computed(() => process.env.API_URL)
         <q-item-label
           >{{ name }}
           <q-icon
-            :name="status === 'active' ? 'done_all' : 'done_all'"
-            :color="status === 'active' ? 'positive' : 'negative'"
+            :name="status === 'active' ? 'done_all' : ''"
+            :color="status === 'active' ? 'positive' : ''"
             size="16px"
           />
         </q-item-label>
         <q-item-label caption>
           {{ email }}
           <q-icon
-            :name="email_verified_at ? 'done_all' : 'done_all'"
-            :color="email_verified_at ? 'positive' : 'negative'"
+            :name="email_verified_at ? 'done_all' : ''"
+            :color="email_verified_at ? 'positive' : ''"
             size="16px"
           />
         </q-item-label>

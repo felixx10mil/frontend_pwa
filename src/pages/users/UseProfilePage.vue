@@ -65,7 +65,6 @@ function handleLogout() {
   <q-page padding>
     <q-list v-if="user">
       <UserInfo :user="user" />
-      <q-separator />
       <q-item v-ripple>
         <q-item-section avatar top>
           <q-avatar icon="contrast" color="primary" text-color="white" />

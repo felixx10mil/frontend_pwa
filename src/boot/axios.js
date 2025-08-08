@@ -12,6 +12,7 @@ import { Notify } from 'quasar'
 
 const api = axios.create({
   baseURL: process.env.API_URL,
+  'Access-Control-Allow-Origin': '*',
   'Content-Type': 'application/json;charset=UTF-8',
 })
 
