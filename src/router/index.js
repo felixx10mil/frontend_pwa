@@ -34,14 +34,18 @@ export default defineRouter(({ store /*,ssrContext*/ }) => {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   })
 
-  const userStore = useAuthStore(store)
+  Router.beforeEach((to /*,from, next*/) => {
+    const userStore = useAuthStore(store)
 
-  Router.beforeEach((to, from, next) => {
-    if (to.matched.some((record) => record.meta.requiresAuth) && !userStore.isAuth) {
-      next({ name: 'login', query: { next: to.fullPath } })
-    } else {
-      next()
+    if (!userStore.isAuth && to.meta.requiresAuth) {
+      return { name: 'login' }
     }
+
+    // if (to.matched.some((record) => record.meta.requiresAuth) && !userStore.isAuth) {
+    //   next({ name: 'login' })
+    // } else {
+    //   next()
+    // }
   })
 
   return Router

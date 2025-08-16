@@ -88,8 +88,8 @@ const onUpdateModalSize = (value) => {
     @hide="onDialogHide"
     persinstent
     :maximized="maximizedToggle"
-    transition-show="slide-up"
-    transition-hide="slide-down"
+    transition-show="slide-left"
+    transition-hide="slide-right"
   >
     <q-card class="q-dialog-plugin">
       <bar-dialog

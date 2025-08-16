@@ -69,7 +69,7 @@ function onReset() {
     persinstent
     :maximized="true"
     transition-show="slide-left"
-    transition-hide="slide-down"
+    transition-hide="slide-right"
   >
     <q-card class="q-dialog-plugin">
       <DialogHeaderBack title="Photo" @customDialogCancel="onDialogCancel()" />

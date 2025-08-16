@@ -140,9 +140,6 @@ const routes = [
   {
     path: '/:catchAll(.*)*',
     component: () => import('src/pages/ErrorNotFound.vue'),
-    meta: {
-      requiresAuth: false,
-    },
   },
 ]
 
